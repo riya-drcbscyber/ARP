@@ -1,9 +1,27 @@
 import Breadcrumb from "../Breadcrumbs/Breadcrumb";
 
-const Calendar = () => {
+const Report = () => {
+  const slideIn = {
+    animation: 'slideIn 1s ease-out forwards',
+  };
+
+  const keyframes = `
+    @keyframes slideIn {
+      0% {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+  `;
+
   return (
     <div className="flex flex-col items-center h-screen mx-auto max-w-7xl">
-      <div className="text-center mt-8 animate-fadeIn">
+      <style>{keyframes}</style>
+      <div className="text-center mt-8" style={slideIn}>
         <h1 className="text-4xl font-extrabold text-gray-900 transition-transform transform hover:scale-105">
           Automated Report Tracking System
         </h1>
@@ -21,4 +39,5 @@ const Calendar = () => {
   );
 };
 
-export default Calendar;
+export default Report;
+
