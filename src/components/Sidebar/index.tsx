@@ -126,8 +126,8 @@ const menuGroups = [
         label: "Forms",
         route: "#",
         children: [
-          { label: "Form Elements", route: "/forms/form-elements" },
-          { label: "Form Layout", route: "/forms/form-layout" },
+          { label: "Report Form", route: "/forms/form-elements" },
+          { label: "", route: "/forms/form-layout" },
         ],
       },
       {
@@ -337,16 +337,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
           <Link href="/">
             <Image
-              width={70}
-              height={65}
+              width={90}
+              height={90}
               src={"images/logo/stm.svg"}
               alt="Logo"
               priority
             />
-            <p>Dr CBS CyberSecurity</p>
+            <br></br>
+            <p style={{ fontWeight: 'bold', color: '' }}>DR CBS Cyber Security Services LLP</p>
           </Link>
-
-          <button
+           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             aria-controls="sidebar"
             className="block lg:hidden"

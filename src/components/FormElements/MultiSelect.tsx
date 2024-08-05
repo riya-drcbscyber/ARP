@@ -96,14 +96,71 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
   return (
     <div className="relative z-50">
       <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-        Multiselect Dropdown
+        Vulnerablity Name
       </label>
       <div>
         <select className="hidden" id={id}>
-          <option value="1">Option 2</option>
-          <option value="2">Option 3</option>
-          <option value="3">Option 4</option>
-          <option value="4">Option 5</option>
+          <option value="1">Absence Of SSL Certificate (For production URL)</option>
+          <option value="2">Lockout Policy</option>
+          <option value="3">HTTP Methods Allowed</option>
+          <option value="4">HTTP Strict Transport Security</option>
+          <option value="5">Credentials Transported over an Un-Encrypted Channel</option>
+          <option value="6">Session Managment</option>
+          <option value="7">Weak Password Policy</option>
+          <option value="8">Session Fixation</option>
+          <option value="9">Session Hijacking</option>
+          <option value="10">Authentication Bypass</option>
+          <option value="11">Back & Refresh Attack</option>
+          <option value="12">Parameter Based Attacks</option>
+          <option value="13">Insecure Direct Object Reference</option>
+          <option value="14">2FA Rate Limit</option>
+          <option value="15">2FA Replay Attack</option>
+          <option value="16">2FA Simple Bypass</option>
+          <option value="17">2FA bypass using brute-force attack</option>
+          <option value="18">Insecure transportion Layer Security</option>
+          <option value="19">Weak Encrption Method For Password Policy</option>
+          <option value="20">Cleartext Storage of Sensitive Information</option>
+          <option value="21">Validation Of SSL Cerificate</option>
+          <option value="22">SQL Injection /OS Command Injection</option>
+          <option value="23">Cross Site Scripting</option>
+          <option value="24">Cross Site Request Frogery</option>
+          <option value="25">Unprotected Storage Of Credentials</option>
+          <option value="26">Unrestricted Storage Of Credentials</option>
+          <option value="27">Private IP Disclosure</option>
+          <option value="28">Generating of Error Messages Containing Sensitive Information</option>
+          <option value="29">Source Code Disclosure</option>
+          <option value="30">XXE</option>
+          <option value="31">Directory Listings</option>
+          <option value="32">Detailed Error Messages Disclosure</option>
+          <option value="33">Server Related Issues</option>
+          <option value="34">Vulnerable and Outdated Components</option>
+          <option value="35">Brute Force or any automated attacks</option>
+          <option value="36">Directory traversal/file Types</option>
+          <option value="37">Upload Of Unexpected File Types</option>
+          <option value="38">HTML Injection</option>
+          <option value="39">Captcha Bypass</option>
+          <option value="40">Functional Error</option>
+          <option value="41">TLS/SSL certificate invali date</option>
+          <option value="42">Absence of Anti-CSRF Tokens</option>
+          <option value="43">Incomplete or No Cache-control Header Set</option>
+          <option value="44">Cookie without htp-only flag</option>
+          <option value="45">Cookie without secure flag</option>
+          <option value="46">Cookie without same-site attribute</option>
+          <option value="47">X-frame option header not set</option>
+          <option value="48">X-content header missing</option>
+          <option value="49">Content Security Policy bypass</option>
+          <option value="50">Exposure of Sensitive information & configuration files</option>
+          <option value="51">Creation of Temporary File in Directory with Insecure Permissions</option>
+          <option value="52">Use of Hard-coded Credentials</option>
+          <option value="53">Server-Side Request Forgery(SSRF)</option>
+          <option value="54">Improper Privilege Management</option>
+          <option value="55">Concurrent Execution Using Shared Resource with Improper Synchronization</option>
+          <option value="56">Unprotected Admin Panel </option>
+          <option value="57">Incorrect Privilage Assingment</option>
+          <option value="58">Improper Input Valiation</option>
+          <option value="59">URL Redirection to Untrusted Site</option>
+          <option value="60">Cross-origin resource sharing</option>
+          <option value="61">Improper Restriction of excessive Authentication Attempts</option>
         </select>
 
         <div className="flex flex-col items-center">

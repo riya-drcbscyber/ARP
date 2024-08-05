@@ -10,11 +10,13 @@ export const metadata: Metadata = {
     "This is Next.js Form Elements page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
 
-const FormElementsPage = () => {
+
+const FormSecondsPage = () => {
   return (
     <DefaultLayout>
-      <FormElements />
+      <Form_second/>
     </DefaultLayout>
   );
 };
-export default FormElementsPage;
+<Form_second />
+export default FormSecondsPage;
