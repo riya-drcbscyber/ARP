@@ -2,19 +2,18 @@ import React from "react";
 import FormElements from "@/components/FormElements";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import Form_second from "@/components/FormElements/Form_second/page";
+import Adverse from "@/components/FormElements/Adverse/page";
 
 export const metadata: Metadata = {
   title: "Next.js Form Elements | TailAdmin - Next.js Dashboard Template",
   description:
     "This is Next.js Form Elements page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
-const FormSecondsPage = () => {
+const adverseForm  = () => {
   return (
     <DefaultLayout>
-      <Form_second/>
+      <Adverse/>
     </DefaultLayout>
   );
 };
-<Form_second />
-export default FormSecondsPage;
+export default adverseForm;
