@@ -7,39 +7,39 @@ const brandData: BRAND[] = [
     name: "Aman",
     number: 1,
     pending: 8,
-    total: 590,
+    total: 4,
     final: 8,
   },
   {
     // logo: "/images/brand/brand-02.svg",
-     name: "Vishant",
+     name: "Hemant",
      number: 3,
     pending: 6,
-    total: 467,
+    total: 1,
     final: 3,
   },
   {
     //  logo: "/images/brand/brand-03.svg",
-    name: "Neha",
+    name: "Riya",
     number: 5,
     pending: 3,
-    total: 420,
+    total: 4,
     final: 7,
   },
   {
     // logo: "/images/brand/brand-04.svg",
-   name: "Hemant",
+   name: "Harsh",
    number: 2,
    pending: 2,
-    total: 389,
+    total: 5,
    final: 5,
   },
   {
     // logo: "/images/brand/brand-05.svg",
-   name: "Harsh",
+   name: "Amritanshu",
    number: 4,
    pending: 8,
-    total: 390,
+    total: 6,
     final: 2,
   },
 ];
@@ -60,22 +60,22 @@ const TableOne = () => {
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              No. OF Audit
+             Total Audit Assign
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Audit Pending
+              Total Audit Pending
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Total Audit
+            Level 1 Sent
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Final Report
+              Finall Sent
             </h5>
           </div>
         </div>

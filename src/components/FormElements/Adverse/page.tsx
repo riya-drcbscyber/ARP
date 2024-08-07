@@ -12,30 +12,40 @@ import CheckboxTwo from "@/components/Checkboxes/CheckboxTwo";
 import DatePickerTwo from "@/components/FormElements/DatePicker/DatePickerTwo";
 import DatePickerOne from "@/components/FormElements/DatePicker/DatePickerOne";
 import MultiSelect from "@/components/FormElements/MultiSelect";
+import Link from 'next/link';
 
 const Adverse = () => {
   return (
     <>
-      {/* <Breadcrumb pageName="Vulnerability Detail" /> */}
       <Breadcrumb pageName="Enter Your Report Type" />
       <div className="flex flex-col gap-9">
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-          <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
-          <div className="flex justify-center mt-16 space-x-4">
-        <button className="bg-blue-500 text-white px-8 py-4 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-blue-600">
-          Level 1 Report
-        </button>
-        <button className="bg-green-500 text-white px-8 py-4 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-green-600">
-          Level 2 Report / Complience
-        </button>
+          <div className="border-b border-stroke px-8 py-8 dark:border-strokedark">
+            <div className="flex flex-col items-center mt-16 space-y-4">
+              <div className="flex justify-center w-full">
+                <Link href="/forms/form-elements">
+                  <div className="bg-blue-500 text-white px-8 py-9 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red cursor-pointer">
+                    Level 1 Report
+                  </div>
+                </Link>
+                <br />
+              </div>
+              <div className="flex justify-center w-full">
+                <button className="bg-green-500 text-white px-8 py-4 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red">
+                  Level 2 Report / Compliance
+                </button>
+                <br />
+              </div>
+              <div className="flex justify-center w-full">
+                <button className="bg-blue-500 text-white px-8 py-9 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red">
+                  Final Report
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-      </div>
-      <button className="bg-red text-white px-8 py-4 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red">
-          Finall Report
-        </button>
-      </div>
-      </>
+    </>
   );
 };
 
