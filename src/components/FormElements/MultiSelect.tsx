@@ -9,9 +9,11 @@ interface Option {
 
 interface DropdownProps {
   id: string;
+  value: string[]; // Add value prop for selected values
+  onChange: (selectedValues: string[]) => void; // Add onChange prop
 }
 
-const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
+const MultiSelect: React.FC<DropdownProps> = ({ id, value, onChange }) => {
   const [options, setOptions] = useState<Option[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
   const [show, setShow] = useState(false);
@@ -27,15 +29,18 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
           newOptions.push({
             value: select.options[i].value,
             text: select.options[i].innerText,
-            selected: select.options[i].hasAttribute("selected"),
+            selected: value.includes(select.options[i].value), // Check if the value is in the passed value prop
           });
         }
         setOptions(newOptions);
+        setSelected(newOptions
+          .map((option, index) => (option.selected ? index : -1))
+          .filter(index => index !== -1));
       }
     };
 
     loadOptions();
-  }, [id]);
+  }, [id, value]);
 
   const open = () => {
     setShow(true);
@@ -61,6 +66,8 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
     }
 
     setOptions(newOptions);
+    const selectedValues = newOptions.filter(opt => opt.selected).map(opt => opt.value);
+    onChange(selectedValues); // Trigger the onChange with updated selected values
   };
 
   const remove = (index: number) => {
@@ -71,11 +78,9 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
       newOptions[index].selected = false;
       setSelected(selected.filter((i) => i !== index));
       setOptions(newOptions);
+      const selectedValues = newOptions.filter(opt => opt.selected).map(opt => opt.value);
+      onChange(selectedValues); // Trigger the onChange with updated selected values
     }
-  };
-
-  const selectedValues = () => {
-    return selected.map((option) => options[option].value);
   };
 
   useEffect(() => {
@@ -96,11 +101,11 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
   return (
     <div className="relative z-50">
       <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-        Vulnerablity Name
+        Vulnerability Name
       </label>
       <div>
         <select className="hidden" id={id}>
-          <option value="1">Absence Of SSL Certificate (For production URL)</option>
+        <option value="1">Absence Of SSL Certificate (For production URL)</option>
           <option value="2">Lockout Policy</option>
           <option value="3">HTTP Methods Allowed</option>
           <option value="4">HTTP Strict Transport Security</option>
@@ -161,10 +166,11 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
           <option value="59">URL Redirection to Untrusted Site</option>
           <option value="60">Cross-origin resource sharing</option>
           <option value="61">Improper Restriction of excessive Authentication Attempts</option>
+
         </select>
 
         <div className="flex flex-col items-center">
-          <input name="values" type="hidden" defaultValue={selectedValues()} />
+          <input name="values" type="hidden" defaultValue={value.join(',')} />
           <div className="relative z-20 inline-block w-full">
             <div className="relative flex flex-col items-center">
               <div ref={trigger} onClick={open} className="w-full">
@@ -208,7 +214,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
                         <input
                           placeholder="Select an option"
                           className="h-full w-full appearance-none bg-transparent p-1 px-2 outline-none"
-                          defaultValue={selectedValues()}
+                          defaultValue={value.join(',')}
                         />
                       </div>
                     )}
@@ -275,7 +281,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div>  
     </div>
   );
 };
