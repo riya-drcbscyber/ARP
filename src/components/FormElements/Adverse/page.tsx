@@ -31,7 +31,7 @@ const Adverse = () => {
                 <br />
               </div>
               <div className="flex justify-center w-full">
-                <button className="bg-green-500 text-white px-8 py-4 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red">
+                <button className="bg-green-500 text-white px-8 py-6 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red">
                   Level 2 Report / Compliance
                 </button>
                 <br />
