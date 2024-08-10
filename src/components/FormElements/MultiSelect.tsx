@@ -105,8 +105,8 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, value, onChange }) => {
       </label>
       <div>
         <select className="hidden" id={id}>
-        <option value="1">Absence Of SSL Certificate (For production URL)</option>
-          <option value="2">Lockout Policy</option>
+        <option value="Absence Of SSL Certificate">Absence Of SSL Certificate</option>
+          <option value="Lockout Policy">Lockout Policy</option>
           <option value="3">HTTP Methods Allowed</option>
           <option value="4">HTTP Strict Transport Security</option>
           <option value="5">Credentials Transported over an Un-Encrypted Channel</option>

@@ -44,6 +44,7 @@ const Form_second = () => {
       if (response.ok) {
         // Handle success, e.g., show a success message or redirect
         alert("Form submitted successfully!");
+        window.open("http://localhost:3000/report", "_blank");
       } else {
         // Handle errors, e.g., show an error message
         alert("Failed to submit form");
