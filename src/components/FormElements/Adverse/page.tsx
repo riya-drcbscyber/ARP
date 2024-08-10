@@ -23,22 +23,22 @@ const Adverse = () => {
           <div className="border-b border-stroke px-8 py-8 dark:border-strokedark">
             <div className="flex flex-col items-center mt-16 space-y-4">
               <div className="flex justify-center w-full">
-                <Link href="/forms/form-elements">
-                  <div className="bg-blue-500 text-white px-8 py-9 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red cursor-pointer">
-                    Level 1 Report
+                <Link href="/forms/Report">
+                  <div className="bg-blue-500 text-white px-8 py-8 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red cursor-pointer">
+                    Web Application
                   </div>
                 </Link>
                 <br />
               </div>
               <div className="flex justify-center w-full">
-                <button className="bg-green-500 text-white px-8 py-4 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red">
-                  Level 2 Report / Compliance
+                <button className="bg-green-500 text-white px-11 py-7 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red">
+                  AUA-KUA
                 </button>
                 <br />
               </div>
               <div className="flex justify-center w-full">
                 <button className="bg-blue-500 text-white px-8 py-9 rounded-lg text-lg w-55 transition-transform transform hover:scale-105 hover:bg-red">
-                  Final Report
+                  Mobile Application
                 </button>
               </div>
             </div>

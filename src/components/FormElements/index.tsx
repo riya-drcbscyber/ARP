@@ -64,7 +64,7 @@ const FormElements = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Details Of Report" />
+      <Breadcrumb pageName=" Report" />
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-3">
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -79,9 +79,10 @@ const FormElements = () => {
                 { label: 'Location', name: 'location', placeholder: 'Location' },
                 { label: 'Hash Value', name: 'hashValue', placeholder: 'Hash Value' },
                 { label: 'Designation', name: 'designation', placeholder: 'Designation' },
-                { label: 'Email ID', name: 'email', placeholder: 'Email' },
-                { label: 'Work Order', name: 'workOrder', placeholder: 'Work Order' },
+                { label: 'Auditee Email ID', name: 'email', placeholder: 'Email' },
+                { label: 'Work Order Number', name: 'workOrder', placeholder: 'Work Order' },
                 { label: 'Location Of Error', name: 'errorLocation', placeholder: 'Location Of Error' },
+                // { label: 'Report Id', name: 'reportid', placeholder: 'Location Of Error' },
               ].map(({ label, name, placeholder }) => (
                 <div key={name}>
                   <label className="mb-3 block text-sm font-medium text-black dark:text-white">{label}</label>
