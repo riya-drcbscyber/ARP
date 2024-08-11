@@ -5,11 +5,16 @@ import MultiSelect from "@/components/FormElements/MultiSelect";
 
 const Form_second = () => {
   const [location, setLocation] = useState<string>("");
+  const [reportId, setReportId] = useState<string>(""); // Added state for report ID
   const [selectedVulnerabilities, setSelectedVulnerabilities] = useState<string[]>([]);
   const [screenshots, setScreenshots] = useState<FileList | null>(null);
 
   const handleLocationChange = (e: ChangeEvent<HTMLInputElement>) => {
     setLocation(e.target.value);
+  };
+
+  const handleReportIdChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setReportId(e.target.value); // Handler for report ID
   };
 
   const handleVulnerabilitiesChange = (selectedOptions: string[]) => {
@@ -27,6 +32,7 @@ const Form_second = () => {
 
     const formData = new FormData();
     formData.append("location", location);
+    formData.append("reportId", reportId); // Append report ID to form data
     formData.append("vulnerabilities", JSON.stringify(selectedVulnerabilities));
 
     if (screenshots) {
@@ -77,7 +83,7 @@ const Form_second = () => {
               />
             </div>
 
-            <br></br>
+            <br />
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
                 <h3 className="font-medium text-black dark:text-white">
@@ -105,6 +111,18 @@ const Form_second = () => {
                   multiple
                   onChange={handleFileChange}
                   className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:px-5 file:py-3 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
+                />
+              </div>
+              <div className="mt-4">
+                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                  Report ID
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter Report ID"
+                  value={reportId}
+                  onChange={handleReportIdChange}
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
               <div className="mt-4">
