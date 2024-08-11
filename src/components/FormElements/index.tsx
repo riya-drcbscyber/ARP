@@ -19,7 +19,10 @@ const FormElements = () => {
     approvedBy: '',
     distributedTo: '',
     reportStartDate: '',
-    reportEndDate: ''
+    reportEndDate: '',
+    reportid: '',
+    documentid: ''
+
   });
 //all data here
   const [files, setFiles] = useState<FileList | null>(null);
@@ -78,11 +81,12 @@ const FormElements = () => {
                 { label: 'Test URL', name: 'testURL', placeholder: 'URL' },
                 { label: 'Location', name: 'location', placeholder: 'Location' },
                 { label: 'Hash Value', name: 'hashValue', placeholder: 'Hash Value' },
-                { label: 'Designation', name: 'designation', placeholder: 'Designation' },
-                { label: 'Auditee Email ID', name: 'email', placeholder: 'Email' },
-                { label: 'Work Order Number', name: 'workOrder', placeholder: 'Work Order' },
-                { label: 'Location Of Error', name: 'errorLocation', placeholder: 'Location Of Error' },
-                // { label: 'Report Id', name: 'reportid', placeholder: 'Location Of Error' },
+                { label: 'Designation of Contact Person', name: 'designation', placeholder: 'Designation' },
+                { label: 'Email ID of Contact Person', name: 'email', placeholder: 'Email' },
+                { label: 'Work Order', name: 'workOrder', placeholder: 'Work Order' },
+                //{ label: 'Location Of Error', name: 'errorLocation', placeholder: 'Location Of Error' },
+                {label: 'Report Id', name: 'reportid', placeholder: 'Enter Report Id'},
+                {label: 'Document Id',name: 'documentid', placeholder: 'Enter Document Id'}
               ].map(({ label, name, placeholder }) => (
                 <div key={name}>
                   <label className="mb-3 block text-sm font-medium text-black dark:text-white">{label}</label>
@@ -136,7 +140,7 @@ const FormElements = () => {
                 { label: 'Prepared by', name: 'preparedBy', placeholder: 'Prepared by' },
                 { label: 'Reviewed by', name: 'reviewedBy', placeholder: 'Reviewed by' },
                 { label: 'Approved by', name: 'approvedBy', placeholder: 'Approved by' },
-                { label: 'Distributed to', name: 'distributedTo', placeholder: 'Distributed to' },
+                { label: 'Name of Contact Person', name: 'distributedTo', placeholder: 'Distributed to' },
               ].map(({ label, name, placeholder }) => (
                 <div className="flex items-center" key={name}>
                   <label className="mr-6 whitespace-nowrap text-sm font-medium text-black dark:text-white">{label}</label>
@@ -153,18 +157,6 @@ const FormElements = () => {
             </div>
           </div>
 
-
-       
-
-          {/* <div className="flex justify-start p-5">
-            <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors duration-300">
-              Submit
-            </button>
-          
-            <Link href="/forms/form-element-new" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300 justify-end ml-10">
-              Detailed Observations
-            </Link>
-          </div> */}
 
           <div className="flex justify-between p-5">
   <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors duration-300">
