@@ -21,7 +21,11 @@ const FormElements = () => {
     reportStartDate: '',
     reportEndDate: '',
     reportid: '',
-    documentid: ''
+    documentid: '',
+    wr: '',
+    hr: '',
+    UR: ''
+
 
   });
 //all data here
@@ -86,7 +90,10 @@ const FormElements = () => {
                 { label: 'Work Order', name: 'workOrder', placeholder: 'Work Order' },
                 //{ label: 'Location Of Error', name: 'errorLocation', placeholder: 'Location Of Error' },
                 {label: 'Report Id', name: 'reportid', placeholder: 'Enter Report Id'},
-                {label: 'Document Id',name: 'documentid', placeholder: 'Enter Document Id'}
+                {label: 'Document Id',name: 'documentid', placeholder: 'Enter Document Id'},
+                {label: 'Enter work order Recieved on',name: 'wr', placeholder: 'Enter work order recieved'},
+                {label: 'Hash Recieved on',name: 'hr', placeholder: 'Enter hash recieved on'},
+                {label: 'Enter URL recieved on',name: 'UR', placeholder: 'Enter URL recieved on'},
               ].map(({ label, name, placeholder }) => (
                 <div key={name}>
                   <label className="mb-3 block text-sm font-medium text-black dark:text-white">{label}</label>
@@ -138,7 +145,7 @@ const FormElements = () => {
             <div className="flex flex-col gap-5.5 p-6.5">
               {[
                 { label: 'Prepared by', name: 'preparedBy', placeholder: 'Prepared by' },
-                { label: 'Reviewed by', name: 'reviewedBy', placeholder: 'Reviewed by' },
+                { label: 'Verify by', name: 'reviewedBy', placeholder: 'Reviewed by' },
                 { label: 'Approved by', name: 'approvedBy', placeholder: 'Approved by' },
                 { label: 'Name of Contact Person', name: 'distributedTo', placeholder: 'Distributed to' },
               ].map(({ label, name, placeholder }) => (
