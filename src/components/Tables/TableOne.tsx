@@ -46,36 +46,36 @@ const brandData: BRAND[] = [
 
 const TableOne = () => {
   return (
-    <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+    <div className="rounded-lg border border-gray-300 bg-gray-100 px-6 pb-4 pt-6 shadow-lg dark:border-gray-600 dark:bg-gray-900 sm:px-8 xl:pb-2">
+      <h4 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
         Auditor Stats
       </h4>
 
       <div className="flex flex-col">
-        <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
-          <div className="p-2.5 xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-             Auditor Name
+        <div className="grid grid-cols-3 rounded-lg bg-gray-200 dark:bg-gray-700 sm:grid-cols-5">
+          <div className="p-3 xl:p-4">
+            <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
+              Auditor Name
             </h5>
           </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-             Total Audit Assign
+          <div className="p-3 text-center xl:p-4">
+            <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
+              Total Audit Assign
             </h5>
           </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
+          <div className="p-3 text-center xl:p-4">
+            <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
               Total Audit Pending
             </h5>
           </div>
-          <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-            Level 1 Sent
+          <div className="hidden p-3 text-center sm:block xl:p-4">
+            <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
+              Level 1 Sent
             </h5>
           </div>
-          <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Finall Sent
+          <div className="hidden p-3 text-center sm:block xl:p-4">
+            <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
+              Final Sent
             </h5>
           </div>
         </div>
@@ -85,33 +85,31 @@ const TableOne = () => {
             className={`grid grid-cols-3 sm:grid-cols-5 ${
               key === brandData.length - 1
                 ? ""
-                : "border-b border-stroke dark:border-strokedark"
+                : "border-b border-gray-300 dark:border-gray-600"
             }`}
             key={key}
           >
-            <div className="flex items-center gap-3 p-2.5 xl:p-5">
+            <div className="flex items-center gap-3 p-3 xl:p-4">
               {/* <div className="flex-shrink-0">
                 <Image src={brand.logo} alt="Brand" width={48} height={48} />
               </div> */}
-              <p className="hidden text-black dark:text-white sm:block">
-                {brand.name}
-              </p>
+              <p className="text-gray-700 dark:text-gray-200">{brand.name}</p>
             </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{brand.number}</p>
+            <div className="flex items-center justify-center p-3 xl:p-4">
+              <p className="text-blue-600 dark:text-blue-400">{brand.number}</p>
             </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-meta-3">{brand.pending}</p>
+            <div className="flex items-center justify-center p-3 xl:p-4">
+              <p className="text-yellow-600 dark:text-yellow-400">{brand.pending}</p>
             </div>
 
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">{brand.total}</p>
+            <div className="hidden items-center justify-center p-3 sm:flex xl:p-4">
+              <p className="text-green-600 dark:text-green-400">{brand.total}</p>
             </div>
 
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-meta-5">{brand.final}</p>
+            <div className="hidden items-center justify-center p-3 sm:flex xl:p-4">
+              <p className="text-purple-600 dark:text-purple-400">{brand.final}</p>
             </div>
           </div>
         ))}

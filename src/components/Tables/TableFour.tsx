@@ -51,7 +51,7 @@ const TableFour: React.FC = () => {
       <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="mb-6 flex justify-between">
           <div>
-            <h4 className="text-title-sm2 font-bold text-black dark:text-white">
+            <h4 className="text-title-sm2 font-bold text-black dark:text-white ">
             Auditor Stats
             </h4>
           </div>
