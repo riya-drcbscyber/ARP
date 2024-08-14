@@ -7,18 +7,11 @@ import React from "react";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
 
-// const MapOne = dynamic(() => import("@/components/Maps/MapOne"), {
-//   ssr: false,
-// });
-
-// const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
-//   ssr: false,
-// });
 
 const ECommerce: React.FC = () => {
   return (
     <>
-     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4 2xl:gap-8">
+     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2 2xl:gap-8">
         <CardDataStats title="Total Number Of Audits" total="50" levelUp>
           <svg
             className="fill-current text-blue-400 dark:text-blue-300 transform transition-transform duration-300 hover:scale-110"
@@ -38,7 +31,7 @@ const ECommerce: React.FC = () => {
             />
           </svg>
         </CardDataStats>
-
+        <div className="md:ml-3">
         <CardDataStats title="Total Audit Pending" total="30" levelUp>
           <svg
             className="fill-current text-green-400 dark:text-green-300 transform transition-transform duration-300 hover:scale-110"
@@ -58,9 +51,10 @@ const ECommerce: React.FC = () => {
           </svg>
         </CardDataStats>
       </div>
+      </div>
 
-      <div className="mt-6 grid grid-cols-12 gap-6 2xl:gap-8">
-        <div className="col-span-12 xl:col-span-8">
+      <div className="mt-6 grid grid-cols-12 gap-4 xl:mx-2">
+        <div className="col-span-12 xl:col-span-15">
           <TableOne />
         </div>
       </div>

@@ -43,7 +43,6 @@ const brandData: BRAND[] = [
     final: 2,
   },
 ];
-
 const TableOne = () => {
   return (
     <div className="rounded-lg border border-gray-300 bg-gray-100 px-6 pb-4 pt-6 shadow-lg dark:border-gray-600 dark:bg-gray-900 sm:px-8 xl:pb-2">
