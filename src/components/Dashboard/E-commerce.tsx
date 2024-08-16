@@ -11,6 +11,35 @@ import CardDataStats from "../CardDataStats";
 const ECommerce: React.FC = () => {
   return (
     <>
+      <div className="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white p-6 rounded-lg shadow-lg mb-6 relative overflow-hidden">
+        <h1 className="text-3xl font-bold mb-2">Welcome back to your Daily Task Manager</h1>
+        <p className="text-lg">Manage your tasks efficiently and stay productive!</p>
+        <div className="absolute top-0 right-0 w-24 h-24 bg-green-600 rounded-full opacity-15 transform translate-x-8 -translate-y-8"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-600 rounded-full opacity-15 transform -translate-x-8 translate-y-8"></div>
+        <div className="absolute top-1/2 left-1/2 w-20 h-20 bg-blue-600 rounded-full opacity-20 transform -translate-x-1/2 -translate-y-1/2"></div>
+      </div>
+      <br></br>
+      <div className="flex justify-between items-center mb-6">
+        <div className="text-center">
+          <h2 className="text-xl font-bold">Project Time Tracker</h2>
+          <div className="mt-2 bg-green-100 text-green-800 rounded-lg p-2 shadow-md">
+            <p className="text-2xl font-semibold">12 hrs</p>
+          </div>
+        </div>
+        <div className="text-center">
+          <h2 className="text-xl font-bold">Tasks in Process</h2>
+          <div className="mt-2 bg-yellow-100 text-yellow-800 rounded-lg p-2 shadow-md">
+            <p className="text-2xl font-semibold">5</p>
+          </div>
+        </div>
+        <div className="text-center">
+          <h2 className="text-xl font-bold">Finished Tasks</h2>
+          <div className="mt-2 bg-blue-100 text-blue-800 rounded-lg p-2 shadow-md">
+            <p className="text-2xl font-semibold">8</p>
+          </div>
+        </div>
+      </div>
+      <br></br>
      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2 2xl:gap-8">
         <CardDataStats title="Total Number Of Audits" total="50" levelUp>
           <svg
@@ -61,5 +90,4 @@ const ECommerce: React.FC = () => {
     </>
   );
 };
-
 export default ECommerce;

@@ -2,46 +2,46 @@ import { BRAND } from "@/types/brand";
 //  import Image from "next/image";
 
 const brandData: BRAND[] = [
-  {
-    // logo: "/images/brand/brand-01.svg",
-    name: "Aman",
-    number: 1,
-    pending: 8,
-    total: 4,
-    final: 8,
-  },
-  {
-    // logo: "/images/brand/brand-02.svg",
-     name: "Hemant",
-     number: 3,
-    pending: 6,
-    total: 1,
-    final: 3,
-  },
-  {
-    //  logo: "/images/brand/brand-03.svg",
-    name: "Riya",
-    number: 5,
-    pending: 3,
-    total: 4,
-    final: 7,
-  },
-  {
-    // logo: "/images/brand/brand-04.svg",
-   name: "Harsh",
-   number: 2,
-   pending: 2,
-    total: 5,
-   final: 5,
-  },
-  {
-    // logo: "/images/brand/brand-05.svg",
-   name: "Amritanshu",
-   number: 4,
-   pending: 8,
-    total: 6,
-    final: 2,
-  },
+  // {
+  //   // logo: "/images/brand/brand-01.svg",
+  //   name: "Aman",
+  //   number: 1,
+  //   pending: 8,
+  //   total: 4,
+  //   final: 8,
+  // },
+  // {
+  //   // logo: "/images/brand/brand-02.svg",
+  //    name: "Hemant",
+  //    number: 3,
+  //   pending: 6,
+  //   total: 1,
+  //   final: 3,
+  // },
+  // {
+  //   //  logo: "/images/brand/brand-03.svg",
+  //   name: "Riya",
+  //   number: 5,
+  //   pending: 3,
+  //   total: 4,
+  //   final: 7,
+  // },
+  // {
+  //   // logo: "/images/brand/brand-04.svg",
+  //  name: "Harsh",
+  //  number: 2,
+  //  pending: 2,
+  //   total: 5,
+  //  final: 5,
+  // },
+  // {
+  //   // logo: "/images/brand/brand-05.svg",
+  //  name: "Amritanshu",
+  //  number: 4,
+  //  pending: 8,
+  //   total: 6,
+  //   final: 2,
+  // },
 ];
 const TableOne = () => {
   return (

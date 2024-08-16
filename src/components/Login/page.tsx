@@ -97,8 +97,8 @@
         >
           {darkMode ? 'Light Mode' : 'Dark Mode'}
         </button>
-        <div className={`shadow-lg rounded-lg px-6 pt-4 pb-6 w-full max-w-sm ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-          <div className={`text-2xl font-bold mb-6 text-center ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+        <div className={`shadow-lg rounded-lg px-8 pt-6 pb-8 w-full max-w-md ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+          <div className={`text-3xl font-bold mb-8 text-center ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>
             Login
           </div>
           {errorMessage && (
@@ -112,7 +112,7 @@
             </div>
           )}
           <form onSubmit={handleSubmit}>
-            <label className="block text-sm font-bold mb-2">
+            <label className="block text-sm font-bold mb-3">
               Employee ID:
               <input
                 type="text"
@@ -120,10 +120,10 @@
                 value={formData.employeeId}
                 onChange={handleChange}
                 required
-                className={`block border rounded px-3 py-2 mt-1 w-full text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-100 border-gray-300 text-gray-900'} ${inputStyles.employeeId}`}
+                className={`block border rounded px-4 py-2 mt-1 w-full text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-100 border-gray-300 text-gray-900'} ${inputStyles.employeeId}`}
               />
             </label>
-            <label className="block text-sm font-bold mb-2">
+            <label className="block text-sm font-bold mb-3">
               Password:
               <div className="relative">
                 <input
@@ -132,7 +132,7 @@
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className={`block border rounded px-3 py-2 mt-1 w-full text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-100 border-gray-300 text-gray-900'} ${inputStyles.password}`}
+                  className={`block border rounded px-4 py-2 mt-1 w-full text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-100 border-gray-300 text-gray-900'} ${inputStyles.password}`}
                 />
                 <button
                   type="button"
@@ -145,12 +145,12 @@
             </label>
             <button 
               type="submit" 
-              className={`mt-4 font-semibold py-2 px-4 rounded-lg text-sm w-full transition-transform transform hover:scale-105 ${darkMode ? 'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500 focus:ring-opacity-50' : 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-600 focus:ring-opacity-50'}`}
+              className={`mt-6 font-semibold py-2 px-4 rounded-lg text-sm w-full transition-transform transform hover:scale-105 ${darkMode ? 'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500 focus:ring-opacity-50' : 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-600 focus:ring-opacity-50'}`}
             >
               Submit
             </button>
           </form>
-          <div className="mt-4">
+          <div className="mt-6">
             <button 
               onClick={handleForgotPassword} 
               className={`block text-sm text-center ${darkMode ? 'text-blue-400 hover:underline' : 'text-blue-600 hover:underline'}`}
@@ -171,5 +171,5 @@
       </main>
     );
   };
-
+    
   export default Login;
