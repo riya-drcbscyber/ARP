@@ -26,7 +26,6 @@ const FormElements = () => {
     hr: '',
     UR: ''
 
-
   });
 //all data here
   const [files, setFiles] = useState<FileList | null>(null);
@@ -85,8 +84,8 @@ const FormElements = () => {
                 { label: 'Test URL', name: 'testURL', placeholder: 'URL' },
                 { label: 'Location', name: 'location', placeholder: 'Location' },
                 { label: 'Hash Value', name: 'hashValue', placeholder: 'Hash Value' },
-                { label: 'Designation of Contact Person', name: 'designation', placeholder: 'Designation' },
-                { label: 'Email ID of Contact Person', name: 'email', placeholder: 'Email' },
+                // { label: 'Designation of Contact Person', name: 'designation', placeholder: 'Designation' },
+                // { label: 'Email ID of Contact Person', name: 'email', placeholder: 'Email' },
                 { label: 'Work Order', name: 'workOrder', placeholder: 'Work Order' },
                 //{ label: 'Location Of Error', name: 'errorLocation', placeholder: 'Location Of Error' },
                 {label: 'Report Id', name: 'reportid', placeholder: 'Enter Report Id'},
@@ -107,9 +106,56 @@ const FormElements = () => {
                   />
                 </div>
               ))}
+              </div>
+            </div>
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
+              <h3 className="font-medium text-black dark:text-white">Enter Distributor Details</h3>
+            </div>
+            <div className="flex flex-col gap-5.5 p-6.5">
+              {[
+            
+                { label: 'Designation of Contact Person', name: 'designation', placeholder: 'Designation' },
+                // { label: 'Email ID of Contact Person', name: 'email', placeholder: 'Email' },
+                { label: 'Work Order', name: 'workOrder', placeholder: 'Work Order' },
+                { label: 'Name of Contact Person', name: 'distributedTo', placeholder: 'Distributed to' },
+              ].map(({ label, name, placeholder }) => (
+                <div key={name}>
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">{label}</label>
+                  <input
+                    type="text"
+                    name={name}
+                    placeholder={placeholder}
+                    value={formData[name as keyof typeof formData]}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+                
+              ))}
+            </div>
+            <div className="flex flex-col gap-5.5 p-6.5">
+            {[
+            
+            
+            { label: 'Email ID of Contact Person', name: 'email', placeholder: 'Enter Email' },
+           
+          ].map(({ label, name, placeholder }) => (
+            <div key={name}>
+              <label className="mb-3 block text-sm font-medium text-black dark:text-white">{label}</label>
+              <input
+                type="email"
+                name={name}
+                placeholder={placeholder}
+                value={formData[name as keyof typeof formData]}
+                onChange={handleChange}
+                className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+              />
+            </div>
+            
+          ))}
             </div>
           </div>
-
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">Enter Dates</h3>
@@ -147,7 +193,7 @@ const FormElements = () => {
                 { label: 'Prepared by', name: 'preparedBy', placeholder: 'Prepared by' },
                 { label: 'Verify by', name: 'reviewedBy', placeholder: 'Reviewed by' },
                 { label: 'Approved by', name: 'approvedBy', placeholder: 'Approved by' },
-                { label: 'Name of Contact Person', name: 'distributedTo', placeholder: 'Distributed to' },
+                
               ].map(({ label, name, placeholder }) => (
                 <div className="flex items-center" key={name}>
                   <label className="mr-6 whitespace-nowrap text-sm font-medium text-black dark:text-white">{label}</label>
@@ -165,7 +211,7 @@ const FormElements = () => {
           </div>
 
 
-          <div className="flex justify-between p-5">
+      <div className="flex justify-between p-5">
   <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors duration-300">
     Submit
   </button>

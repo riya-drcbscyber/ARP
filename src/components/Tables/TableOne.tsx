@@ -47,37 +47,39 @@ const TableOne = () => {
   return (
     <div className="rounded-lg border border-gray-300 bg-gray-100 px-6 pb-4 pt-6 shadow-lg dark:border-gray-600 dark:bg-gray-900 sm:px-8 xl:pb-2">
       <h4 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
-        Auditor Stats
+        {/* Auditor Stats */}
+        Previously Task Completed
       </h4>
+      <div><li></li></div>
 
-      <div className="flex flex-col">
+      {/* <div className="flex flex-col"> */}
         <div className="grid grid-cols-3 rounded-lg bg-gray-200 dark:bg-gray-700 sm:grid-cols-5">
           <div className="p-3 xl:p-4">
-            <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
+            {/* <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
               Auditor Name
-            </h5>
+            </h5> */} 
           </div>
-          <div className="p-3 text-center xl:p-4">
+          {/* <div className="p-3 text-center xl:p-4">
             <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
               Total Audit Assign
             </h5>
-          </div>
-          <div className="p-3 text-center xl:p-4">
+          </div> */}
+          {/* <div className="p-3 text-center xl:p-4">
             <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
               Total Audit Pending
             </h5>
-          </div>
-          <div className="hidden p-3 text-center sm:block xl:p-4">
+          </div> */}
+          {/* <div className="hidden p-3 text-center sm:block xl:p-4">
             <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
               Level 1 Sent
             </h5>
-          </div>
-          <div className="hidden p-3 text-center sm:block xl:p-4">
+          </div> */}
+          {/* <div className="hidden p-3 text-center sm:block xl:p-4">
             <h5 className="text-sm font-medium uppercase text-gray-600 dark:text-gray-300">
               Final Sent
             </h5>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
 
         {brandData.map((brand, key) => (
           <div
