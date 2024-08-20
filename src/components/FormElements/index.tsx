@@ -82,8 +82,10 @@ const FormElements = () => {
     const result = await response.json();
     if (response.ok) {
       alert('Form submitted successfully!');
+      console.error('Submit response:', result);
     } else {
       alert(`Failed to submit form: ${result.message}`);
+      console.error('Error response:', result);
     }
   };
 
