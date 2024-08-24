@@ -4,18 +4,17 @@ interface Option {
   value: string;
   text: string;
   selected: boolean;
-  element?: HTMLElement;
 }
 
 interface DropdownProps {
   id: string;
-  value: string[]; // Add value prop for selected values
-  onChange: (selectedValues: string[]) => void; // Add onChange prop
+  value: string[];
+  onChange: (selectedValues: string[]) => void;
 }
 
 const MultiSelect: React.FC<DropdownProps> = ({ id, value, onChange }) => {
   const [options, setOptions] = useState<Option[]>([]);
-  const [selected, setSelected] = useState<number[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
   const [show, setShow] = useState(false);
   const dropdownRef = useRef<any>(null);
   const trigger = useRef<any>(null);
@@ -26,77 +25,58 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, value, onChange }) => {
       if (select) {
         const newOptions: Option[] = [];
         for (let i = 0; i < select.options.length; i++) {
-          newOptions.push({
+          const option = {
             value: select.options[i].value,
             text: select.options[i].innerText,
-            selected: value.includes(select.options[i].value), // Check if the value is in the passed value prop
-          });
+            selected: value.includes(select.options[i].value),
+          };
+          newOptions.push(option);
         }
         setOptions(newOptions);
-        setSelected(newOptions
-          .map((option, index) => (option.selected ? index : -1))
-          .filter(index => index !== -1));
+        setSelectedOptions(newOptions.filter(option => option.selected));
       }
     };
 
     loadOptions();
   }, [id, value]);
 
-  const open = () => {
-    setShow(true);
-  };
+  const open = () => setShow(true);
 
-  const isOpen = () => {
-    return show === true;
-  };
-
-  const select = (index: number, event: React.MouseEvent) => {
-    const newOptions = [...options];
-
-    if (!newOptions[index].selected) {
-      newOptions[index].selected = true;
-      newOptions[index].element = event.currentTarget as HTMLElement;
-      setSelected([...selected, index]);
+  const select = (index: number) => {
+    const option = options[index];
+    if (!option.selected) {
+      const updatedOptions = [...options];
+      updatedOptions[index].selected = true;
+      setOptions(updatedOptions);
+      const updatedSelectedOptions = [...selectedOptions, option];
+      setSelectedOptions(updatedSelectedOptions);
+      onChange(updatedSelectedOptions.map(opt => opt.value));
     } else {
-      const selectedIndex = selected.indexOf(index);
-      if (selectedIndex !== -1) {
-        newOptions[index].selected = false;
-        setSelected(selected.filter((i) => i !== index));
-      }
+      remove(index);
     }
-
-    setOptions(newOptions);
-    const selectedValues = newOptions.filter(opt => opt.selected).map(opt => opt.value);
-    onChange(selectedValues); // Trigger the onChange with updated selected values
   };
 
   const remove = (index: number) => {
-    const newOptions = [...options];
-    const selectedIndex = selected.indexOf(index);
-
-    if (selectedIndex !== -1) {
-      newOptions[index].selected = false;
-      setSelected(selected.filter((i) => i !== index));
-      setOptions(newOptions);
-      const selectedValues = newOptions.filter(opt => opt.selected).map(opt => opt.value);
-      onChange(selectedValues); // Trigger the onChange with updated selected values
-    }
+    const option = options[index];
+    const updatedSelectedOptions = selectedOptions.filter(opt => opt.value !== option.value);
+    const updatedOptions = options.map(opt =>
+      opt.value === option.value ? { ...opt, selected: false } : opt
+    );
+    setOptions(updatedOptions);
+    setSelectedOptions(updatedSelectedOptions);
+    onChange(updatedSelectedOptions.map(opt => opt.value));
   };
 
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!dropdownRef.current) return;
-      if (
-        !show ||
-        dropdownRef.current.contains(target) ||
-        trigger.current.contains(target)
-      )
+      if (!show || dropdownRef.current.contains(target) || trigger.current.contains(target))
         return;
       setShow(false);
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  });
+  }, [show]);
 
   return (
     <div className="relative z-50">
@@ -166,6 +146,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, value, onChange }) => {
           <option value="URL Redirection to Untrusted Site">URL Redirection to Untrusted Site</option>
           <option value="Cross-origin resource sharing">Cross-origin resource sharing</option>
           <option value="Improper Restriction of excessive Authentication Attempts">Improper Restriction of excessive Authentication Attempts</option>
+          <option value="Email Disclosure">Email Disclosure</option>
 
         </select>
 
@@ -176,17 +157,15 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, value, onChange }) => {
               <div ref={trigger} onClick={open} className="w-full">
                 <div className="mb-2 flex rounded border border-stroke py-2 pl-3 pr-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
                   <div className="flex flex-auto flex-wrap gap-3">
-                    {selected.map((index) => (
+                    {selectedOptions.map((option, idx) => (
                       <div
-                        key={index}
+                        key={option.value}
                         className="my-1.5 flex items-center justify-center rounded border-[.5px] border-stroke bg-gray px-2.5 py-1.5 text-sm font-medium dark:border-strokedark dark:bg-white/30"
                       >
-                        <div className="max-w-full flex-initial">
-                          {options[index].text}
-                        </div>
+                        <div className="max-w-full flex-initial">{option.text}</div>
                         <div className="flex flex-auto flex-row-reverse">
                           <div
-                            onClick={() => remove(index)}
+                            onClick={() => remove(options.indexOf(option))}
                             className="cursor-pointer pl-2 hover:text-danger"
                           >
                             <svg
@@ -209,7 +188,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, value, onChange }) => {
                         </div>
                       </div>
                     ))}
-                    {selected.length === 0 && (
+                    {selectedOptions.length === 0 && (
                       <div className="flex-1">
                         <input
                           placeholder="Select an option"
@@ -248,7 +227,8 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, value, onChange }) => {
               <div className="w-full px-4">
                 <div
                   className={`max-h-select absolute left-0 top-full z-40 w-full overflow-y-auto rounded bg-white shadow dark:bg-form-input ${
-                    isOpen() ? "" : "hidden"
+                    show ? "" : "hidden"
+
                   }`}
                   ref={dropdownRef}
                   onFocus={() => setShow(true)}
@@ -258,18 +238,37 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, value, onChange }) => {
                     {options.map((option, index) => (
                       <div key={index}>
                         <div
-                          className="w-full cursor-pointer rounded-t border-b border-stroke hover:bg-primary/5 dark:border-form-strokedark"
-                          onClick={(event) => select(index, event)}
+                          className="w-full cursor-pointer rounded-t border-b border-stroke hover:bg-primary/5 dark:border-form-strokedark dark:hover:bg-opacity-10"
+                          onClick={() => select(index)}
                         >
                           <div
-                            className={`relative flex w-full items-center border-l-2 border-transparent p-2 pl-2 ${
-                              option.selected ? "border-primary" : ""
+                            className={`relative flex w-full items-center p-2 pl-2 border-l-2 border-transparent ${
+                              selectedOptions.includes(option)
+                                ? "border-l-2 border-primary"
+                                : ""
                             }`}
                           >
-                            <div className="flex w-full items-center">
-                              <div className="mx-2 leading-6">
-                                {option.text}
-                              </div>
+                            <div className="flex w-full items-center justify-between">
+                              <div className="mx-2 leading-6 dark:text-white">{option.text}</div>
+                              {option.selected && (
+                                <div className="flex items-center text-primary">
+                                  <svg
+                                    width="12"
+                                    height="8"
+                                    viewBox="0 0 12 8"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M11.25 1.75L4.5 7.5L0.75 3.75"
+                                      stroke="currentColor"
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    ></path>
+                                  </svg>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -281,7 +280,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, value, onChange }) => {
             </div>
           </div>
         </div>
-      </div>  
+      </div>      
     </div>
   );
 };
