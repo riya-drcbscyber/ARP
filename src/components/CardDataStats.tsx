@@ -5,7 +5,7 @@ interface CardDataStatsProps {
   total: string;
   levelUp?: boolean;
   levelDown?: boolean;
-  children: ReactNode;
+  children?: ReactNode; // Make children optional
 }
 
 const CardDataStats: React.FC<CardDataStatsProps> = ({
@@ -17,9 +17,11 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
 }) => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
-        {children}
-      </div>
+      {children && ( // Conditionally render the children prop
+        <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
+          {children}
+        </div>
+      )}
 
       <div className="mt-4 flex items-end justify-between">
         <div>
@@ -34,8 +36,6 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
             levelUp && "text-meta-3"
           } ${levelDown && "text-meta-5"} `}
         >
-         
-
           {levelUp && (
             <svg
               className="fill-meta-3"
