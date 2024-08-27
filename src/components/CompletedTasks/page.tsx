@@ -10,7 +10,7 @@ const CompletedTasks: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
+    <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-6 mt-6">
       <h2 className="text-xl font-bold mb-4">Previously Completed Tasks</h2>
       <ul>
         {completedTasks.length > 0 ? (
