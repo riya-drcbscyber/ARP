@@ -6,20 +6,11 @@ const FormElements = () => {
   const [formData, setFormData] = useState({
     websiteName: '',
     organizationName: '',
-    location: '',
-    hashValue: '',
-    designation: '',
-    email: '',
     workOrder: '',
-    errorLocation: '',
     preparedBy: '',
     reviewedBy: '',
-    approvedBy: '',
-    distributedTo: '',
-    reportStartDate: '',
-    reportEndDate: '',
-    reportid: '',
     documentid: '',
+    workOrderdate:''
 
   });
   const [files, setFiles] = useState<FileList | null>(null);
@@ -49,7 +40,7 @@ const FormElements = () => {
       });
     }
 
-    const response = await fetch('http://localhost:3000/submit', {
+    const response = await fetch('http://localhost:3000/submitAssign', {
       method: 'POST',
       body: data,
     });
@@ -69,7 +60,7 @@ const FormElements = () => {
         <div className="flex flex-col gap-3">
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">Field Details</h3>
+              <h3 className="font-medium text-black dark:text-white">Fill Details </h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
               {[
@@ -77,7 +68,7 @@ const FormElements = () => {
                 { label: 'Name Of Organization', name: 'organizationName', placeholder: 'Name Of Organization' },
                 { label: 'Work Order', name: 'workOrder', placeholder: 'Work Order' },
                 {label: 'Document Id',name: 'documentid', placeholder: 'Enter Document Id'},
-                {label: 'Enter work order Recieved on',name: 'wr', placeholder: 'Enter work order recieved'},
+                {label: 'Date of WorkOrder recieved',name: 'workOrderdate', placeholder: 'Enter work order recieved'},
               ].map(({ label, name, placeholder }) => (
                 <div key={name}>
                   <label className="mb-3 block text-sm font-medium text-black dark:text-white">{label}</label>
@@ -103,7 +94,7 @@ const FormElements = () => {
     {[
       { label: 'Prepared by', name: 'preparedBy', placeholder: 'Prepared by' },
       { label: 'Verify by', name: 'reviewedBy', placeholder: 'Reviewed by' },
-      { label: 'Approved by', name: 'approvedBy', placeholder: 'Approved by' },
+      
     ].map(({ label, name, placeholder }) => (
       <div className="flex flex-col sm:flex-row items-center gap-2" key={name}> 
         <label className="sm:w-22 text-sm font-medium text-black dark:text-white">
