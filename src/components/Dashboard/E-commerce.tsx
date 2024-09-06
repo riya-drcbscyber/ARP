@@ -2,25 +2,51 @@
 import React, { useEffect, useState } from "react";
 import CompletedTasks from "../CompletedTasks/page";
 import CardDataStats from "../CardDataStats";
+import { useRouter } from 'next/navigation';
 
 const ECommerce: React.FC = () => {
   const [stats, setStats] = useState<any[]>([]);
   const [assignedTasks, setAssignedTasks] = useState<any[]>([]);
+  const router = useRouter();
 
-  // Assuming you have an employeeCode (you might fetch or pass this based on login session)
-  const employeeCode = 'DRCBS-17-005'; // Example employee code, dynamically replace it based on user session
+  // Retrieve the employeeCode from session storage
+  const employeeCode = sessionStorage.getItem('employeeCode') || ''; 
+  console.log("employeecode is dsfdsaf",employeeCode)
 
   useEffect(() => {
+    // Redirect to login if employeeCode is not available
+    if (!employeeCode) {
+      router.push('/login');
+      return;
+    }
+  
     // Fetch dashboard stats
-    fetch("/api/dashboard-stats")
+    fetch(`http://localhost:3000/dashboard-stats/${employeeCode}`)
       .then((response) => response.json())
-      .then((data) => setStats(data));
-
+      .then((data) => {
+        console.log('Fetched dashboard stats:', data); // Log the fetched data
+        setStats(data); // Set the data to state
+      })
+      .catch((error) => {
+        console.error('Error fetching dashboard stats:', error); // Log any errors
+      });
+  
     // Fetch tasks assigned to specific employee
-    fetch(`/api/tasks/${employeeCode}`)
+    fetch(`http://localhost:3000/tasks/${employeeCode}`)
       .then((response) => response.json())
-      .then((data) => setAssignedTasks(data.tasks));
-  }, [employeeCode]);
+      .then((data) => {
+        console.log('Fetched tasks:', data);
+        setAssignedTasks(data.tasks); // Make sure you set data.tasks
+      })
+      .catch((error) => {
+        console.error('Error fetching tasks:', error);
+      });
+  }, [employeeCode, router]);
+  
+
+  if (!employeeCode) {
+    return <p>Loading...</p>; // Or a spinner while checking session storage
+  }
 
   return (
     <>
@@ -32,31 +58,31 @@ const ECommerce: React.FC = () => {
 
       {/* Project Time Tracker & Task Stats */}
       <div className="flex justify-between items-center mb-6">
-        <div className="text-center">
-          <h2 className="text-xl font-bold">Project Time Tracker</h2>
-          <div className="mt-2 bg-green-100 text-green-800 rounded-lg p-2 shadow-md">
-            <p className="text-2xl font-semibold">
-              {stats.find((stat) => stat.stat_type === 'total_hours')?.stat_value || 'Loading...'}
-            </p>
-          </div>
-        </div>
-        <div className="text-center">
-          <h2 className="text-xl font-bold">Tasks in Process</h2>
-          <div className="mt-2 bg-yellow-100 text-yellow-800 rounded-lg p-2 shadow-md">
-            <p className="text-2xl font-semibold">
-              {stats.find((stat) => stat.stat_type === 'tasks_in_process')?.stat_value || 'Loading...'}
-            </p>
-          </div>
-        </div>
-        <div className="text-center">
-          <h2 className="text-xl font-bold">Finished Tasks</h2>
-          <div className="mt-2 bg-blue-100 text-blue-800 rounded-lg p-2 shadow-md">
-            <p className="text-2xl font-semibold">
-              {stats.find((stat) => stat.stat_type === 'finished_tasks')?.stat_value || 'Loading...'}
-            </p>
-          </div>
-        </div>
-      </div>
+  <div className="text-center">
+    <h2 className="text-xl font-bold">Total Tasks</h2>
+    <div className="mt-2 bg-green-100 text-green-800 rounded-lg p-2 shadow-md">
+      <p className="text-2xl font-semibold">
+        {stats.find((stat) => stat.stat_type === 'total_tasks')?.stat_value || 'Loading...'}
+      </p>
+    </div>
+  </div>
+  <div className="text-center">
+    <h2 className="text-xl font-bold">Tasks in Process</h2>
+    <div className="mt-2 bg-yellow-100 text-yellow-800 rounded-lg p-2 shadow-md">
+      <p className="text-2xl font-semibold">
+        {stats.find((stat) => stat.stat_type === 'tasks_in_process')?.stat_value || 'Loading...'}
+      </p>
+    </div>
+  </div>
+  <div className="text-center">
+    <h2 className="text-xl font-bold">Finished Tasks</h2>
+    <div className="mt-2 bg-blue-100 text-blue-800 rounded-lg p-2 shadow-md">
+      <p className="text-2xl font-semibold">
+        {stats.find((stat) => stat.stat_type === 'finished_tasks')?.stat_value || 'Loading...'}
+      </p>
+    </div>
+  </div>
+</div>
 
       {/* Audit Stats */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2 2xl:gap-8">
@@ -110,8 +136,8 @@ const ECommerce: React.FC = () => {
         )}
       </div>
 
-      {/* Completed Tasks */}
-      <CompletedTasks /> {/* Include the CompletedTasks component */}
+      Completed Tasks
+      <CompletedTasks /> 
     </>
   );
 };
