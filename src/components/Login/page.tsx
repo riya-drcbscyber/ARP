@@ -49,11 +49,26 @@
       e.preventDefault();
       setErrorMessage(null);
       setSuccessMessage(null);
-
+    
       try {
         const response = await axios.post('http://localhost:3000/api/login', formData);
-        setSuccessMessage(response.data.message);
-        router.push('/Dboard');
+        // Extracting message and employeeId from the nested user object
+        const { message, user: { employeeId,name,Role } } = response.data;
+    
+        console.log("--------->>", employeeId); // This should log the correct employeeId
+    
+        // Store the employee ID in session storage
+        sessionStorage.setItem('employeeId', employeeId);
+        sessionStorage.setItem('name',name)
+        sessionStorage.setItem('role',Role)
+        console.log("--------->>", Role);
+    
+        setSuccessMessage(message);
+        if (Role === 'Admin'){
+          router.push('/AdminDboard');
+        }
+        else{
+        router.push('/Dboard');}
       } catch (error) {
         if (axios.isAxiosError(error)) {
           setErrorMessage(error.response?.data.message || 'Login failed');
@@ -62,6 +77,8 @@
         }
       }
     };
+    
+    
 
     const handleForgotPassword = async () => {
       setErrorMessage(null);

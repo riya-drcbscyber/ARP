@@ -5,7 +5,7 @@ import ClickOutside from "@/components/ClickOutside";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const name=sessionStorage.getItem('name');
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <Link
@@ -15,7 +15,7 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Govind
+        {name}
           </span>
           <span className="block text-xs">Assistant Cyber Security Auditor</span>
         </span>
