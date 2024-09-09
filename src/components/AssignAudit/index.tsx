@@ -3,6 +3,7 @@ import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
 const FormElements = () => {
+  // Initial form data structure
   const initialFormData = {
     websiteName: '',
     organizationName: '',
@@ -13,44 +14,63 @@ const FormElements = () => {
     workOrderdate: ''
   };
 
+  // State for form data, employees list, and role
   const [formData, setFormData] = useState(initialFormData);
   const [employees, setEmployees] = useState<{ employeeCode: string; employeeName: string }[]>([]);
   const role = sessionStorage.getItem('role');
 
+  // Fetch employees when component mounts
   useEffect(() => {
     const fetchEmployees = async () => {
-      const response = await fetch('/api/employees');
-      const result = await response.json();
-      setEmployees(result.employees);
+      try {
+        const response = await fetch('http://localhost:3000/employees');
+        if (!response.ok) {
+          throw new Error('Failed to fetch employees');
+        }
+        const result = await response.json();
+        setEmployees(result.employees);
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+        alert('Failed to load employee data. Please try again later.');
+      }
     };
     fetchEmployees();
   }, []);
 
+  // Handle input changes in form fields
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const response = await fetch('http://localhost:3000/tasks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const response = await fetch('http://localhost:3000/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-    if (response.ok) {
-      alert('Task created successfully!');
-    } else {
-      alert('Failed to create task');
+      if (response.ok) {
+        alert('Task created successfully!');
+        setFormData(initialFormData);  // Reset form after successful submission
+      } else {
+        throw new Error('Failed to create task');
+      }
+    } catch (error) {
+      console.error('Error submitting task:', error);
+      alert('Failed to create task. Please try again.');
     }
   };
-  console.log("role",role);
+
+  // Ensure that role is checked securely
   return (
     <>
-      {role != 'Admin' ? (
-        <div>You don't have Access</div> // This renders for Admin role, replace with actual Admin content if needed
+      {role !== 'Admin' ? (
+        <div>You don't have Access</div>
       ) : (
         <>
           <Breadcrumb pageName="Assign Task" />

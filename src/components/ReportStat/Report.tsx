@@ -23,7 +23,7 @@ const FormElements = () => {
       data.append(key, formData[key as keyof typeof formData]);
     });
 
-    const response = await fetch('http://localhost:3000/submit', {
+    const response = await fetch('http://localhost:3000/submit-status', {
       method: 'POST',
       body: data,
     });
