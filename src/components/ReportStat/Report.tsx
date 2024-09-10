@@ -2,13 +2,23 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
+// Define the type for a single row of report data
+interface ReportRow {
+  preparedBy: string;
+  reviewedBy: string;
+  preparedByName: string;
+  reviewedByName: string;
+}
+
 const FormElements = () => {
   const [formData, setFormData] = useState({
     reportStartDate: '',
     reportEndDate: '',
-    reportType: '',
     reportSend: '',
   });
+
+  // Use the ReportRow type for reportData
+  const [reportData, setReportData] = useState<ReportRow[]>([]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,21 +28,25 @@ const FormElements = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data = new FormData();
-    Object.keys(formData).forEach(key => {
-      data.append(key, formData[key as keyof typeof formData]);
-    });
+    try {
+      const response = await fetch('http://localhost:3000/get-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const response = await fetch('http://localhost:3000/submit-status', {
-      method: 'POST',
-      body: data,
-    });
-
-    const result = await response.json();
-    if (response.ok) {
-      alert('Form submitted successfully!');
-    } else {
-      alert(`Failed to submit form: ${result.message}`);
+      const result = await response.json();
+      if (response.ok) {
+        setReportData(result); // Update the state with the fetched report data
+        alert('Report fetched successfully!');
+      } else {
+        alert(`Failed to fetch report: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Error fetching the report:', error);
+      alert('An error occurred while fetching the report.');
     }
   };
 
@@ -41,14 +55,15 @@ const FormElements = () => {
       <Breadcrumb pageName="Report" />
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-3">
-          {/* Section for Report Type and Radio Buttons */}
           <div className="rounded-sm border border-stroke bg-gray-50 shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">Report Status</h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
               <div>
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">Report Status On</label>
+                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                  Report Start Date
+                </label>
                 <input
                   type="date"
                   name="reportStartDate"
@@ -58,7 +73,9 @@ const FormElements = () => {
                 />
               </div>
               <div>
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">Report Till Date</label>
+                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                  Report End Date
+                </label>
                 <input
                   type="date"
                   name="reportEndDate"
@@ -67,19 +84,13 @@ const FormElements = () => {
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
+
+              {/* Optional Radio Button for Report Send Status */}
+              {/* 
               <div>
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">Type of Report</label>
-                <input
-                  type="text"
-                  name="reportType"
-                  placeholder="Enter Type of Report"
-                  value={formData.reportType}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
-              <div>
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">Report Sent</label>
+                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                  Report Sent
+                </label>
                 <div className="flex gap-5">
                   {['L1 Sent', 'L2 Sent', 'Final Sent'].map((label, index) => (
                     <div key={index} className="flex items-center gap-2">
@@ -98,46 +109,42 @@ const FormElements = () => {
                   ))}
                 </div>
               </div>
+              */}
             </div>
           </div>
-          {formData.reportSend && (
+
+          {/* Conditional rendering of the report table */}
+          {reportData.length > 0 && (
             <div className="mt-4">
               <h3 className="font-medium text-black dark:text-white">Auditor Details</h3>
               <table className="min-w-full table-auto mt-2 border-collapse border border-gray-300 dark:border-gray-600">
                 <thead>
                   <tr className="bg-gray-100 dark:bg-gray-700 text-black dark:text-white">
-                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Auditor 1</th>
-                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Auditor 2</th>
-                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Name of Portal</th>
-                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Date</th>
+                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Prepared By</th>
+                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Reviewed By</th>
+                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Prepared By Name</th>
+                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Reviewed By Name</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="bg-gray-50 dark:bg-gray-800 text-black dark:text-white">
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">Hemant</td>
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">Harshita</td>
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">Portal A</td>
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">2024-09-05</td>
-                  </tr>
-                  <tr className="bg-gray-50 dark:bg-gray-800 text-black dark:text-white">
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">Hemant</td>
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">Harshita</td>
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">Portal B</td>
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">2024-09-05</td>
-                  </tr>
-                  <tr className="bg-gray-50 dark:bg-gray-800 text-black dark:text-white">
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">Harsh</td>
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">Yash</td>
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">Portal C</td>
-                    <td className="border border-gray-300 px-4 py-2 dark:border-gray-600">2024-09-06</td>
-                  </tr>
+                  {reportData.map((row, index) => (
+                    <tr key={index} className="border border-gray-300 dark:border-gray-600">
+                      <td className="px-4 py-2">{row.preparedBy}</td>
+                      <td className="px-4 py-2">{row.reviewedBy}</td>
+                      <td className="px-4 py-2">{row.preparedByName}</td>
+                      <td className="px-4 py-2">{row.reviewedByName}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           )}
 
           <div className="flex justify-between p-5">
-            <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors duration-300">
+            <button
+              type="submit"
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors duration-300"
+            >
               Submit
             </button>
           </div>

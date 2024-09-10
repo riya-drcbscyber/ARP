@@ -171,10 +171,10 @@ const ECommerce: React.FC = () => {
 
                       <input
                         type="radio"
-                        id="L3"
+                        id="Final"
                         name="reportType"
-                        value="L3"
-                        checked={reportType === "L3"}
+                        value="Final"
+                        checked={reportType === "Final"}
                         onChange={(e) => setReportType(e.target.value)}
                         className="mr-2"
                       />
