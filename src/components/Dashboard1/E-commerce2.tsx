@@ -10,7 +10,8 @@ const ECommerce_new: React.FC = () => {
   });
   const [showProjects, setShowProjects] = useState(false);
   const [projects, setProjects] = useState<any[]>([]);
-   // State to store the projects data
+  const [showEmp, setShowEmp] = useState(false); // State to toggle employee visibility
+  const [employees, setEmployees] = useState<any[]>([]); // State to store employee data
 
   useEffect(() => {
     // Fetch dashboard stats
@@ -32,6 +33,18 @@ const ECommerce_new: React.FC = () => {
     }
   };
 
+  const handleTotalEmployee = async () => {
+    const newShowEmp = !showEmp;
+    setShowEmp(newShowEmp);
+    if (newShowEmp) {
+      fetch('http://localhost:3000/employeesA') // Assuming this endpoint returns a list of projects
+        .then((response) => response.json())
+        .then((data) => setEmployees(data))
+        .catch((error) => console.error('Error fetching projects:', error));
+    }
+  };
+    
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <header className="bg-blue-800 p-4 flex justify-between items-center text-white shadow-lg">
@@ -51,7 +64,10 @@ const ECommerce_new: React.FC = () => {
             <div className="text-5xl font-extrabold">{stats.totalProject}</div>
             <div className="text-lg mt-2">Total Projects</div>
           </div>
-          <div className="bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600 p-6 rounded-lg shadow-xl text-white transform transition-transform duration-300 hover:scale-105">
+          <div 
+            onClick={handleTotalEmployee} 
+            className="cursor-pointer bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600 p-6 rounded-lg shadow-xl text-white transform transition-transform duration-300 hover:scale-105"
+          >
             <div className="text-5xl font-extrabold">{stats.totalEmployees}</div>
             <div className="text-lg mt-2">Total Employees</div>
           </div>
@@ -67,29 +83,53 @@ const ECommerce_new: React.FC = () => {
 
         {/* Projects Table */}
         {showProjects && (
-  <div className="mt-8 p-6 bg-white rounded-xl shadow-xl">
-    <h3 className="text-3xl font-bold mb-6 text-gray-800">Total Projects</h3>
-    <table className="min-w-full bg-white border rounded-lg overflow-hidden">
-      <thead>
-        <tr className="bg-gray-200">
-          <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Task ID</th>
-          <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Project Name</th>
-          <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {projects.map((project, index) => (
-          <tr key={index} className="hover:bg-gray-100 transition duration-300">
-            <td className="py-4 px-6 border-b text-sm text-gray-700">{project.id}</td>
-            <td className="py-4 px-6 border-b text-sm text-gray-700">{project.websiteName}</td>
-            <td className="py-4 px-6 border-b text-sm text-gray-700">{project.status}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)}
+          <div className="mt-8 p-6 bg-white rounded-xl shadow-xl">
+            <h3 className="text-3xl font-bold mb-6 text-gray-800">Total Projects</h3>
+            <table className="min-w-full bg-white border rounded-lg overflow-hidden">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Task ID</th>
+                  <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Project Name</th>
+                  <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {projects.map((project, index) => (
+                  <tr key={index} className="hover:bg-gray-100 transition duration-300">
+                    <td className="py-4 px-6 border-b text-sm text-gray-700">{project.id}</td>
+                    <td className="py-4 px-6 border-b text-sm text-gray-700">{project.websiteName}</td>
+                    <td className="py-4 px-6 border-b text-sm text-gray-700">{project.status}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
+        {/* Employees Table */}
+        {showEmp && (
+          <div className="mt-8 p-6 bg-white rounded-xl shadow-xl">
+            <h3 className="text-3xl font-bold mb-6 text-gray-800">Total Employees</h3>
+            <table className="min-w-full bg-white border rounded-lg overflow-hidden">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Employee ID</th>
+                  <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Employee Name</th>
+                  <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                {employees.map((employee, index) => (
+                  <tr key={index} className="hover:bg-gray-100 transition duration-300">
+                    <td className="py-4 px-6 border-b text-sm text-gray-700">{employee.employeeId}</td>
+                    <td className="py-4 px-6 border-b text-sm text-gray-700">{employee.name}</td>
+                    <td className="py-4 px-6 border-b text-sm text-gray-700">{employee.designation}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </main>
 
       <footer className="bg-gray-800 p-4 text-center text-white shadow-inner">
