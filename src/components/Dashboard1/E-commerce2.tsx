@@ -10,26 +10,26 @@ const ECommerce_new: React.FC = () => {
   });
   const [showProjects, setShowProjects] = useState(false);
   const [projects, setProjects] = useState<any[]>([]);
-  const [showEmp, setShowEmp] = useState(false); // State to toggle employee visibility
-  const [employees, setEmployees] = useState<any[]>([]); // State to store employee data
+  const [showEmp, setShowEmp] = useState(false);
+  const [employees, setEmployees] = useState<any[]>([]);
+  const [employeeStatus, setEmployeeStatus] = useState<{ [key: string]: any }>({}); // Storing task statuses
 
   useEffect(() => {
     // Fetch dashboard stats
-    fetch('http://localhost:3000/admin-dashboard-stats')
+    fetch("http://localhost:3000/admin-dashboard-stats")
       .then((response) => response.json())
       .then((data) => setStats(data))
-      .catch((error) => console.error('Error fetching dashboard stats:', error));
+      .catch((error) => console.error("Error fetching dashboard stats:", error));
   }, []);
 
   const handleShowProjects = () => {
-    setShowProjects(!showProjects); // Toggle the visibility of the projects table
+    setShowProjects(!showProjects);
 
-    // Fetch total projects details when the card is clicked and if not already visible
     if (!showProjects) {
-      fetch('http://localhost:3000/projects') // Assuming this endpoint returns a list of projects
+      fetch("http://localhost:3000/projects")
         .then((response) => response.json())
         .then((data) => setProjects(data))
-        .catch((error) => console.error('Error fetching projects:', error));
+        .catch((error) => console.error("Error fetching projects:", error));
     }
   };
 
@@ -37,35 +37,51 @@ const ECommerce_new: React.FC = () => {
     const newShowEmp = !showEmp;
     setShowEmp(newShowEmp);
     if (newShowEmp) {
-      fetch('http://localhost:3000/employeesA') // Assuming this endpoint returns a list of projects
+      fetch("http://localhost:3000/employeesA")
         .then((response) => response.json())
         .then((data) => setEmployees(data))
-        .catch((error) => console.error('Error fetching projects:', error));
+        .catch((error) => console.error("Error fetching employees:", error));
     }
   };
-    
+
+  const toggleEmployeeStatus = async (employeeId: string) => {
+    if (!employeeStatus[employeeId]) {
+      try {
+        const response = await fetch(`http://localhost:3000/employee-stats/${employeeId}`);
+        const data = await response.json();
+        setEmployeeStatus((prevStatus) => ({
+          ...prevStatus,
+          [employeeId]: data, // Store task data for the employee
+        }));
+      } catch (error) {
+        console.error("Error fetching employee task status:", error);
+      }
+    } else {
+      setEmployeeStatus((prevStatus) => ({
+        ...prevStatus,
+        [employeeId]: null, // Toggle off by setting to null
+      }));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <header className="bg-blue-800 p-4 flex justify-between items-center text-white shadow-lg">
         <h1 className="text-2xl font-bold">EMPLOYEE TASK MANAGEMENT SYSTEM</h1>
-        <div className="flex items-center">
-          <span className="mr-2 text-lg">Admin</span>
-        </div>
       </header>
 
       <main className="flex-1 p-6">
         <h2 className="text-3xl font-semibold mb-6 text-gray-700">Dashboard</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div 
-            onClick={handleShowProjects} 
+          <div
+            onClick={handleShowProjects}
             className="cursor-pointer bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 p-6 rounded-lg shadow-xl text-white transform transition-transform duration-300 hover:scale-105"
           >
             <div className="text-5xl font-extrabold">{stats.totalProject}</div>
             <div className="text-lg mt-2">Total Projects</div>
           </div>
-          <div 
-            onClick={handleTotalEmployee} 
+          <div
+            onClick={handleTotalEmployee}
             className="cursor-pointer bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600 p-6 rounded-lg shadow-xl text-white transform transition-transform duration-300 hover:scale-105"
           >
             <div className="text-5xl font-extrabold">{stats.totalEmployees}</div>
@@ -116,14 +132,40 @@ const ECommerce_new: React.FC = () => {
                   <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Employee ID</th>
                   <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Employee Name</th>
                   <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Role</th>
+                  <th className="py-3 px-6 border-b-2 text-left text-sm font-semibold text-gray-600">Task Status</th>
                 </tr>
               </thead>
               <tbody>
-                {employees.map((employee, index) => (
-                  <tr key={index} className="hover:bg-gray-100 transition duration-300">
+                {employees.map((employee) => (
+                  <tr key={employee.employeeId} className="hover:bg-gray-100 transition duration-300">
                     <td className="py-4 px-6 border-b text-sm text-gray-700">{employee.employeeId}</td>
                     <td className="py-4 px-6 border-b text-sm text-gray-700">{employee.name}</td>
                     <td className="py-4 px-6 border-b text-sm text-gray-700">{employee.designation}</td>
+                    <td className="py-4 px-6 border-b text-sm text-gray-700">
+                      <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                        onClick={() => toggleEmployeeStatus(employee.employeeId)}
+                      >
+                        {employeeStatus[employee.employeeId] ? "Hide Status" : "Show Status"}
+                      </button>
+                      {employeeStatus[employee.employeeId] && (
+                        <div className="mt-2">
+                          {employeeStatus[employee.employeeId].length > 0 ? (
+                            employeeStatus[employee.employeeId].map((task: any, index: number) => (
+                              <div key={index}>
+                                <p>Task ID: {task.id}</p>
+                                <p>Website: {task.websiteName}</p>
+                                <p>Status: {task.status}</p>
+                                <p>Work Order Date: {task.workOrderDate}</p>
+                                <p>Last Submitted Report: {task.LastSubmitedReport}</p>
+                              </div>
+                            ))
+                          ) : (
+                            <p>No tasks available</p>
+                          )}
+                        </div>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -140,3 +182,4 @@ const ECommerce_new: React.FC = () => {
 };
 
 export default ECommerce_new;
+  
