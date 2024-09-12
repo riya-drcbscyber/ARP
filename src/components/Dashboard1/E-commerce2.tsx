@@ -12,7 +12,7 @@ const ECommerce_new: React.FC = () => {
   const [projects, setProjects] = useState<any[]>([]);
   const [showEmp, setShowEmp] = useState(false);
   const [employees, setEmployees] = useState<any[]>([]);
-  const [employeeStatus, setEmployeeStatus] = useState<{ [key: string]: any }>({}); // Storing task statuses
+  const [employeeStatus, setEmployeeStatus] = useState<{ [key: string]: any }>({});
 
   useEffect(() => {
     // Fetch dashboard stats
@@ -33,7 +33,7 @@ const ECommerce_new: React.FC = () => {
     }
   };
 
-  const handleTotalEmployee = async () => {
+  const handleTotalEmployee = () => {
     const newShowEmp = !showEmp;
     setShowEmp(newShowEmp);
     if (newShowEmp) {
@@ -51,7 +51,7 @@ const ECommerce_new: React.FC = () => {
         const data = await response.json();
         setEmployeeStatus((prevStatus) => ({
           ...prevStatus,
-          [employeeId]: data, // Store task data for the employee
+          [employeeId]: data,
         }));
       } catch (error) {
         console.error("Error fetching employee task status:", error);
@@ -59,7 +59,7 @@ const ECommerce_new: React.FC = () => {
     } else {
       setEmployeeStatus((prevStatus) => ({
         ...prevStatus,
-        [employeeId]: null, // Toggle off by setting to null
+        [employeeId]: null,
       }));
     }
   };
@@ -151,15 +151,28 @@ const ECommerce_new: React.FC = () => {
                       {employeeStatus[employee.employeeId] && (
                         <div className="mt-2">
                           {employeeStatus[employee.employeeId].length > 0 ? (
-                            employeeStatus[employee.employeeId].map((task: any, index: number) => (
-                              <div key={index}>
-                                <p>Task ID: {task.id}</p>
-                                <p>Website: {task.websiteName}</p>
-                                <p>Status: {task.status}</p>
-                                <p>Work Order Date: {task.workOrderDate}</p>
-                                <p>Last Submitted Report: {task.LastSubmitedReport}</p>
-                              </div>
-                            ))
+                            <table className="table-auto border-collapse border border-gray-300">
+                              <thead>
+                                <tr className="bg-gray-100">
+                                  <th className="border px-4 py-2">Task ID</th>
+                                  <th className="border px-4 py-2">Website</th>
+                                  <th className="border px-4 py-2">Status</th>
+                                  <th className="border px-4 py-2">Work Order Date</th>
+                                  <th className="border px-4 py-2">Last Submitted Report</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {employeeStatus[employee.employeeId].map((task: any, index: number) => (
+                                  <tr key={index} className="bg-white">
+                                    <td className="border px-4 py-2">{task.id}</td>
+                                    <td className="border px-4 py-2">{task.websiteName}</td>
+                                    <td className="border px-4 py-2">{task.status}</td>
+                                    <td className="border px-4 py-2">{task.workOrderDate}</td>
+                                    <td className="border px-4 py-2">{task.LastSubmitedReport}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
                           ) : (
                             <p>No tasks available</p>
                           )}
@@ -182,4 +195,3 @@ const ECommerce_new: React.FC = () => {
 };
 
 export default ECommerce_new;
-  

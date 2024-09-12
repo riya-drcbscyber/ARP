@@ -9,6 +9,7 @@ const ECommerce: React.FC = () => {
   const [assignedTasks, setAssignedTasks] = useState<any[]>([]);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null); // Track selected task
   const [reportType, setReportType] = useState<string>("L1"); // Default report type
+  const [auditStartDate, setAuditStartDate] = useState<string>(""); // State for audit start date
   const router = useRouter();
 
   // Retrieve employeeCode from session storage
@@ -44,7 +45,7 @@ const ECommerce: React.FC = () => {
     fetch('http://localhost:3000/submit-report', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ taskId, reportType })
+      body: JSON.stringify({ taskId, reportType, auditStartDate })
     })
     .then(response => response.json())
     .then(data => {
@@ -53,6 +54,22 @@ const ECommerce: React.FC = () => {
     })
     .catch(error => {
       console.error('Error submitting report:', error);
+    });
+  };
+
+  const handleDateSubmit = (taskId: string) => {
+    fetch('http://localhost:3000/AuditDateUpdate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ taskId, auditStartDate })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Audit start date updated:', data);
+      setSelectedTaskId(null); // Clear selected task after submission
+    })
+    .catch(error => {
+      console.error('Error updating audit start date:', error);
     });
   };
 
@@ -147,6 +164,23 @@ const ECommerce: React.FC = () => {
                   <div className="mt-4 p-4 border-t border-gray-300">
                     <h3 className="text-lg font-bold mb-2">Submit Report</h3>
                     <div className="flex items-center mb-2">
+                      <label htmlFor="auditStartDate" className="mr-4">Audit Start Date:</label>
+                      <input
+                        type="date"
+                        id="auditStartDate"
+                        value={auditStartDate}
+                        onChange={(e) => setAuditStartDate(e.target.value)}
+                        className="border p-2 rounded"
+                      />
+                      <button
+                        className="bg-green-500 text-white px-4 py-2 rounded ml-4"
+                        onClick={() => handleDateSubmit(task.id)}
+                      >
+                        Submit Date
+                      </button>
+                    </div>
+
+                    <div className="flex items-center mb-2">
                       <input
                         type="radio"
                         id="L1"
@@ -178,14 +212,14 @@ const ECommerce: React.FC = () => {
                         onChange={(e) => setReportType(e.target.value)}
                         className="mr-2"
                       />
-                      <label htmlFor="L3">Final</label>
+                      <label htmlFor="Final">Final</label>
                     </div>
 
                     <button
                       className="bg-blue-500 text-white px-4 py-2 rounded"
                       onClick={() => handleSubmit(task.id)}
                     >
-                      Submit
+                      Submit Report
                     </button>
                   </div>
                 )}
