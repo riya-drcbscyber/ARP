@@ -4,10 +4,10 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
 // Define the type for a single row of report data
 interface ReportRow {
-  preparedBy: string;
-  reviewedBy: string;
-  wname: string;
-  CurrentReportStatus: string;
+  preparedByName: string;      // from emp1.name
+  reviewedByName: string;      // from emp2.name
+  wname: string;               // from t.websiteName
+  CurrentReportStatus: string; // from t.LastSubmitedReport
 }
 
 const FormElements = () => {
@@ -27,7 +27,7 @@ const FormElements = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch('http://localhost:3000/get-report', {
         method: 'POST',
@@ -36,8 +36,10 @@ const FormElements = () => {
         },
         body: JSON.stringify(formData),
       });
-
+  
       const result = await response.json();
+      console.log('API Response:', result);  // Log API response for debugging
+  
       if (response.ok) {
         setReportData(result); // Update the state with the fetched report data
         alert('Report fetched successfully!');
@@ -49,7 +51,7 @@ const FormElements = () => {
       alert('An error occurred while fetching the report.');
     }
   };
-
+  
   return (
     <>
       <Breadcrumb pageName="Report" />
@@ -84,7 +86,6 @@ const FormElements = () => {
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
-
             </div>
           </div>
 
@@ -97,22 +98,21 @@ const FormElements = () => {
                   <tr className="bg-gray-100 dark:bg-gray-700 text-black dark:text-white">
                     <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Prepared By</th>
                     <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Reviewed By</th>
-                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Portal Name </th>
-                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Type of Report send</th>
+                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Portal Name</th>
+                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Current Report Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {reportData.map((row, index) => (
                     <tr key={index} className="border border-gray-300 dark:border-gray-600">
-                      <td className="px-4 py-2">{row.preparedBy}</td>
-                      <td className="px-4 py-2">{row.reviewedBy}</td>
+                      <td className="px-4 py-2">{row.preparedByName}</td>
+                      <td className="px-4 py-2">{row.reviewedByName}</td>
                       <td className="px-4 py-2">{row.wname}</td>
                       <td className="px-4 py-2">{row.CurrentReportStatus}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              
             </div>
           )}
 

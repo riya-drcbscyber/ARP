@@ -6,6 +6,7 @@ import ClickOutside from "@/components/ClickOutside";
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const name=sessionStorage.getItem('name');
+  const Desig=sessionStorage.getItem('Designation');
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <Link
