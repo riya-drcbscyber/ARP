@@ -41,7 +41,6 @@ const FormElements = () => {
       <Breadcrumb pageName="Report" />
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-3">
-          {/* Section for Report Type and Radio Buttons */}
           <div className="rounded-sm border border-stroke bg-gray-50 shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">Report Status</h3>

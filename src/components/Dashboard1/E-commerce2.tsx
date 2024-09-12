@@ -22,13 +22,13 @@ const ECommerce_new: React.FC = () => {
         <h1 className="text-2xl font-bold">EMPLOYEE TASK MANAGEMENT SYSTEM</h1>
         <div className="flex items-center">
           <span className="mr-2 text-lg">Admin</span>
-          <div className="rounded-full bg-gray-300 p-2 shadow-inner">
+          {/* <div className="rounded-full bg-gray-300 p-2 shadow-inner">
             <img
               src="/path-to-profile-pic.png"
               alt="Profile"
               className="rounded-full w-8 h-8 object-cover"
             />
-          </div>
+          </div> */}
         </div>
       </header>
 
