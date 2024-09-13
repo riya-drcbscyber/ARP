@@ -4,8 +4,9 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
 // Define the type for a single row of report data
 interface ReportRow {
-  preparedByName: string;      // from emp1.name
-  reviewedByName: string;      // from emp2.name
+  Auditor1: string; 
+  Auditor2: string;     // from emp1.name
+  reviewedBy: string;      // from emp2.name
   wname: string;               // from t.websiteName
   CurrentReportStatus: string; // from t.LastSubmitedReport
 }
@@ -96,7 +97,8 @@ const FormElements = () => {
               <table className="min-w-full table-auto mt-2 border-collapse border border-gray-300 dark:border-gray-600">
                 <thead>
                   <tr className="bg-gray-100 dark:bg-gray-700 text-black dark:text-white">
-                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Prepared By</th>
+                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Auditor 1</th>
+                    <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Auditor 2</th>
                     <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Reviewed By</th>
                     <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Portal Name</th>
                     <th className="border border-gray-300 px-4 py-2 dark:border-gray-600">Current Report Status</th>
@@ -105,8 +107,9 @@ const FormElements = () => {
                 <tbody>
                   {reportData.map((row, index) => (
                     <tr key={index} className="border border-gray-300 dark:border-gray-600">
-                      <td className="px-4 py-2">{row.preparedByName}</td>
-                      <td className="px-4 py-2">{row.reviewedByName}</td>
+                      <td className="px-4 py-2">{row.Auditor1}</td>
+                      <td className="px-4 py-2">{row.Auditor2}</td>
+                      <td className="px-4 py-2">{row.reviewedBy}</td>
                       <td className="px-4 py-2">{row.wname}</td>
                       <td className="px-4 py-2">{row.CurrentReportStatus}</td>
                     </tr>
