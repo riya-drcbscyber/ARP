@@ -1,34 +1,39 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CompletedTasks from "../CompletedTasks/page";
-import CardDataStats from "../CardDataStats";
 import { useRouter } from 'next/navigation';
 
 const ECommerce: React.FC = () => {
   const [stats, setStats] = useState<any[]>([]);
   const [assignedTasks, setAssignedTasks] = useState<any[]>([]);
-  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null); // Track selected task
-  const [reportType, setReportType] = useState<string>("L1"); // Default report type
-  const [auditStartDate, setAuditStartDate] = useState<string>(""); // State for audit start date
+  const [completedTasks, setCompletedTasks] = useState<any[]>([]);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [reportType, setReportType] = useState<string>("L1");
+  const [auditStartDate, setAuditStartDate] = useState<string>("");
   const router = useRouter();
 
-  // Retrieve employeeCode from session storage
   const employeeCode = sessionStorage.getItem('employeeId') || ''; 
 
+  // Fetch completed tasks from backend
   useEffect(() => {
-    // Redirect to login if employeeCode is not available
+    if (!employeeCode) return;
+
+    fetch(`http://localhost:3000/tasks/${employeeCode}/completed`)
+      .then(response => response.json())
+      .then(data => setCompletedTasks(data.completedTasks))
+      .catch(error => console.error('Error fetching completed tasks:', error));
+  }, [employeeCode]);
+
+  useEffect(() => {
     if (!employeeCode) {
       router.push('/');
       return;
     }
 
-    // Fetch dashboard stats
     fetch(`http://localhost:3000/dashboard-stats/${employeeCode}`)
       .then((response) => response.json())
       .then((data) => setStats(data))
       .catch((error) => console.error('Error fetching dashboard stats:', error));
 
-    // Fetch tasks assigned to specific employee
     fetch(`http://localhost:3000/tasks/${employeeCode}`)
       .then((response) => response.json())
       .then((data) => setAssignedTasks(data.tasks))
@@ -36,7 +41,7 @@ const ECommerce: React.FC = () => {
   }, [employeeCode, router]);
 
   const handleTaskClick = (taskId: string) => {
-    setSelectedTaskId(prevTaskId => (prevTaskId === taskId ? null : taskId)); // Toggle task selection
+    setSelectedTaskId(prevTaskId => (prevTaskId === taskId ? null : taskId));
   };
 
   const handleSubmit = (taskId: string) => {
@@ -50,7 +55,20 @@ const ECommerce: React.FC = () => {
     .then(response => response.json())
     .then(data => {
       console.log('Report submitted:', data);
-      setSelectedTaskId(null); // Clear selected task after submission
+      setSelectedTaskId(null); 
+
+      // After submission, validate from backend if the task is completed (i.e., 'Final')
+      if (reportType === "Final") {
+        fetch(`http://localhost:3000/tasks/${employeeCode}/completed`)
+          .then(response => response.json())
+          .then(data => {
+            const completedTask = assignedTasks.find(task => task.id === taskId);
+            const updatedAssignedTasks = assignedTasks.filter(task => task.id !== taskId);
+            setAssignedTasks(updatedAssignedTasks);
+            setCompletedTasks(data.completedTasks); // Update with validated completed tasks
+          })
+          .catch(error => console.error('Error fetching completed tasks:', error));
+      }
     })
     .catch(error => {
       console.error('Error submitting report:', error);
@@ -66,7 +84,7 @@ const ECommerce: React.FC = () => {
     .then(response => response.json())
     .then(data => {
       console.log('Audit start date updated:', data);
-      setSelectedTaskId(null); // Clear selected task after submission
+      setSelectedTaskId(null);
     })
     .catch(error => {
       console.error('Error updating audit start date:', error);
@@ -79,13 +97,12 @@ const ECommerce: React.FC = () => {
 
   return (
     <>
-      {/* Welcome Section */}
       <div className="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white p-6 rounded-lg shadow-lg mb-6">
         <h1 className="text-3xl font-bold mb-2">Welcome back to your Daily Task Manager</h1>
         <p className="text-lg">Manage your tasks efficiently and stay productive!</p>
       </div>
 
-      {/* Task Stats */}
+      {/* Stats Section */}
       <div className="flex justify-between items-center mb-6">
         <div className="text-center">
           <h2 className="text-xl font-bold">Total Tasks</h2>
@@ -113,19 +130,7 @@ const ECommerce: React.FC = () => {
         </div>
       </div>
 
-      {/* Audit Stats */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2">
-        <CardDataStats
-          title="Total Number Of Audits"
-          total={stats.find(stat => stat.stat_type === "total_audits")?.stat_value || "Loading..."}
-        />
-        <CardDataStats
-          title="Total Audit Pending"
-          total={stats.find(stat => stat.stat_type === "total_pending_audits")?.stat_value || "Loading..."}
-        />
-      </div>
-
-      {/* Assigned Tasks Section */}
+      {/* Tasks Section */}
       <div className="mt-6">
         <h2 className="text-2xl font-bold mb-4">Assigned Tasks</h2>
         {assignedTasks.length === 0 ? (
@@ -159,7 +164,6 @@ const ECommerce: React.FC = () => {
                   <strong>Work Order Date:</strong> {new Date(task.workOrderDate).toLocaleDateString()}
                 </p>
 
-                {/* Report Submission Form */}
                 {selectedTaskId === task.id && (
                   <div className="mt-4 p-4 border-t border-gray-300">
                     <h3 className="text-lg font-bold mb-2">Submit Report</h3>
@@ -173,48 +177,24 @@ const ECommerce: React.FC = () => {
                         className="border p-2 rounded"
                       />
                       <button
-                        className="bg-green-500 text-white px-4 py-2 rounded ml-4"
+                        className="bg-blue-500 text-white px-4 py-2 ml-4 rounded"
                         onClick={() => handleDateSubmit(task.id)}
                       >
                         Submit Date
                       </button>
                     </div>
-
-                    <div className="flex items-center mb-2">
-                      <input
-                        type="radio"
-                        id="L1"
-                        name="reportType"
-                        value="L1"
-                        checked={reportType === "L1"}
+                    <div className="flex items-center mb-4">
+                      <label className="mr-4">Report Type:</label>
+                      <select
+                        value={reportType}
                         onChange={(e) => setReportType(e.target.value)}
-                        className="mr-2"
-                      />
-                      <label htmlFor="L1" className="mr-4">L1</label>
-
-                      <input
-                        type="radio"
-                        id="L2"
-                        name="reportType"
-                        value="L2"
-                        checked={reportType === "L2"}
-                        onChange={(e) => setReportType(e.target.value)}
-                        className="mr-2"
-                      />
-                      <label htmlFor="L2" className="mr-4">L2</label>
-
-                      <input
-                        type="radio"
-                        id="Final"
-                        name="reportType"
-                        value="Final"
-                        checked={reportType === "Final"}
-                        onChange={(e) => setReportType(e.target.value)}
-                        className="mr-2"
-                      />
-                      <label htmlFor="Final">Final</label>
+                        className="border p-2 rounded"
+                      >
+                        <option value="L1">L1</option>
+                        <option value="L2">L2</option>
+                        <option value="Final">Final</option>
+                      </select>
                     </div>
-
                     <button
                       className="bg-blue-500 text-white px-4 py-2 rounded"
                       onClick={() => handleSubmit(task.id)}
@@ -229,9 +209,42 @@ const ECommerce: React.FC = () => {
         )}
       </div>
 
-      {/* Completed Tasks Section */}
-      <CompletedTasks />
+      {/* Completed Final Reports */}
+      <CompletedFinalReports completedTasks={completedTasks} />
     </>
+  );
+};
+
+const CompletedFinalReports: React.FC<{ completedTasks: any[] }> = ({ completedTasks }) => {
+  return (
+    <div className="mt-6">
+      <h2 className="text-2xl font-bold mb-4">Completed Final Reports</h2>
+      {completedTasks.length === 0 ? (
+        <p className="text-lg text-gray-500">No completed tasks yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {completedTasks.map(task => (
+            <div key={task.id} className="bg-white rounded-lg shadow-lg p-6 dark:bg-boxdark dark:border dark:border-strokedark">
+              <h2 className="text-xl font-medium text-black mb-2 dark:text-white">
+                {task.websiteName}
+              </h2>
+              <p className="text-sm text-gray-600 mb-1 dark:text-gray-300">
+                <strong>Organization:</strong> {task.organizationName}
+              </p>
+              <p className="text-sm text-gray-600 mb-1 dark:text-gray-300">
+                <strong>Work Order:</strong> {task.workOrder}
+              </p>
+              <p className="text-sm text-gray-600 mb-1 dark:text-gray-300">
+                <strong>Document ID:</strong> {task.documentid}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                <strong>Work Order Date:</strong> {new Date(task.workOrderDate).toLocaleDateString()}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 

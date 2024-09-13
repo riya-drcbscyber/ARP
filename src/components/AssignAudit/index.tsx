@@ -5,7 +5,6 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 const FormElements = () => {
   const initialFormData = {
     websiteName: '',
-    organizationName: '',
     workOrder: '',
     documentid: '',
     workOrderDate: '', // Changed this field name
@@ -101,7 +100,7 @@ const FormElements = () => {
                 </div>
                 <div className="flex flex-col gap-5.5 p-6.5">
                   {[{ label: 'Website Name', name: 'websiteName', placeholder: 'Name' },
-                    { label: 'Organization Name', name: 'organizationName', placeholder: 'Organization' },
+                  
                     { label: 'Work Order', name: 'workOrder', placeholder: 'Work Order' },
                     { label: 'Document ID', name: 'documentid', placeholder: 'Document ID' },
                     { label: 'Date of Work Order received', name: 'workOrderDate', placeholder: 'Enter work order received' }].map(({ label, name, placeholder }) => (
