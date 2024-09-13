@@ -1,47 +1,73 @@
-"use client";
-import React, { useState } from 'react';
+"use client"; // Add this line
+
+import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import axios from 'axios';
 
 const EmployeeDashboard = () => {
-  const [selectedMonth, setSelectedMonth] = useState(null); // State to track the selected month
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
+  const [reportTotals, setReportTotals] = useState([]);
+  const [weeklyData, setWeeklyData] = useState([]);
 
   const employeeData = {
     name: 'Govind Pareek',
     email: 'Govind [at] drcbscyber [dot] com',
-    completions: 2, 
-    badges: 102,
-    certificates: 72,
-    reportsSent: [
-      { month: 'January', weeks: [4, 3, 2, 3] },
-      { month: 'Feb', weeks: [2, 2, 3, 1] },
-      { month: 'March', weeks: [5, 3, 4, 2] },
-      { month: 'April', weeks: [3, 2, 2, 3] },
-      { month: 'May', weeks: [5, 4, 3, 4] },
-      { month: 'June', weeks: [3, 2, 2, 2] },
-      { month: 'July', weeks: [4, 3, 3, 2] },
-      { month: 'August', weeks: [2, 4, 2, 3] },
-      { month: 'Sept', weeks: [3, 2, 4, 1] },
-      { month: 'October', weeks: [5, 3, 3, 4] },
-      { month: 'Nov', weeks: [2, 4, 3, 2] },
-      { month: 'Decm', weeks: [4, 3, 2, 5] },
-    ],
+    completions: 200, // Placeholder
+    badges: 102, // Placeholder
+    certificates: 72, // Placeholder
   };
 
-  const reportTotals = employeeData.reportsSent.map((monthData) => {
-    const total = monthData.weeks.reduce((sum, week) => sum + week, 0);
-    return { month: monthData.month, total };
-  });
+  interface ReportItem {
+    month: number;
+    totalReports: number;
+  }
 
-  const handleBarClick = (data) => {
-    setSelectedMonth(data.month); 
+  useEffect(() => {
+    // Fetch monthly reports data from API
+    axios
+      .get('http://localhost:3000/m-reports', { params: { auditor: 'Govind Pareek' } })
+      .then((response) => {
+        const formattedData = response.data.map((item: ReportItem) => ({
+          month: new Date(0, item.month - 1).toLocaleString('en', { month: 'long' }),
+          total: item.totalReports,
+        }));
+        setReportTotals(formattedData);
+      })
+      .catch((error) => {
+        console.error('Error fetching report data:', error);
+      });
+  }, []);
+
+  interface ReportData {
+    totalReports: number;
+  }
+
+  useEffect(() => {
+    if (selectedMonth) {
+      const monthNumber = new Date(`${selectedMonth} 1, 2023`);
+
+      axios
+        .get('http://localhost:3000/weekly-reports')
+        .then((response) => {
+          const formattedWeeklyData = response.data.map((item: ReportData, index: number) => ({
+            week: `Week ${index + 1}`,
+            reports: item.totalReports,
+          }));
+          setWeeklyData(formattedWeeklyData);
+        })
+        .catch((error) => {
+          console.error('Error fetching weekly report data:', error);
+        });
+    }
+  }, [selectedMonth]);
+
+  interface BarClickData {
+    month: string;  // Adjust the type as necessary (e.g., string, number, etc.)
+  }
+
+  const handleBarClick = (data: BarClickData) => {
+    setSelectedMonth(data.month);
   };
-
-  const weeklyData = selectedMonth
-    ? employeeData.reportsSent.find((monthData) => monthData.month === selectedMonth).weeks.map((weekReports, index) => ({
-        week: `Week ${index + 1}`,
-        reports: weekReports,
-      }))
-    : [];
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-900 dark:to-black">
@@ -86,7 +112,14 @@ const EmployeeDashboard = () => {
               <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Reports Sent (Monthly)</h2>
               <div className="bg-white dark:bg-gray-800 p-6 shadow-lg rounded-lg">
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={reportTotals} onClick={(e) => handleBarClick(e.activePayload[0].payload)}>
+                  <BarChart
+                    data={reportTotals}
+                    onClick={(e) => {
+                      if (e && e.activePayload && e.activePayload.length) {
+                        handleBarClick(e.activePayload[0].payload);
+                      }
+                    }}
+                  >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
                     <YAxis />

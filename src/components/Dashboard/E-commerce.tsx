@@ -53,13 +53,7 @@ const ECommerce: React.FC = () => {
       setSelectedTaskId(null); // Clear selected task after submission
 
       // If the report type is "Final", move the task to completed tasks
-      if (reportType === "Final") {
-        setAssignedTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-        setCompletedTasks(prevCompleted => [
-          ...prevCompleted,
-          assignedTasks.find(task => task.id === taskId)
-        ]);
-      }
+     
     })
     .catch(error => {
       console.error('Error submitting report:', error);
