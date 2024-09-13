@@ -19,7 +19,7 @@ const ECommerce: React.FC = () => {
 
     fetch(`http://localhost:3000/tasks/${employeeCode}/completed`)
       .then(response => response.json())
-      .then(data => setCompletedTasks(data.completedTasks))
+      .then(data => setCompletedTasks(data.completedTasks || []))
       .catch(error => console.error('Error fetching completed tasks:', error));
   }, [employeeCode]);
 
@@ -45,51 +45,37 @@ const ECommerce: React.FC = () => {
   };
 
   const handleSubmit = (taskId: string) => {
-    console.log(`Submitting report for task ${taskId}:`, reportType);
+  console.log(`Submitting report for task ${taskId}:`, reportType);
 
-    fetch('http://localhost:3000/submit-report', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ taskId, reportType, auditStartDate })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Report submitted:', data);
-      setSelectedTaskId(null); 
+  fetch('http://localhost:3000/submit-report', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ taskId, reportType, auditStartDate })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Report submitted:', data);
+    setSelectedTaskId(null); 
 
-      // After submission, validate from backend if the task is completed (i.e., 'Final')
-      if (reportType === "Final") {
-        fetch(`http://localhost:3000/tasks/${employeeCode}/completed`)
-          .then(response => response.json())
-          .then(data => {
-            const completedTask = assignedTasks.find(task => task.id === taskId);
-            const updatedAssignedTasks = assignedTasks.filter(task => task.id !== taskId);
-            setAssignedTasks(updatedAssignedTasks);
-            setCompletedTasks(data.completedTasks); // Update with validated completed tasks
-          })
-          .catch(error => console.error('Error fetching completed tasks:', error));
-      }
-    })
-    .catch(error => {
-      console.error('Error submitting report:', error);
-    });
-  };
+    // If the report type is "Final", update completed tasks
+    if (reportType === "Final") {
+      fetch(`http://localhost:3000/tasks/${employeeCode}/completed`)
+        .then(response => response.json())
+        .then(data => {
+          // Remove the task from assignedTasks
+          const updatedAssignedTasks = assignedTasks.filter(task => task.id !== taskId);
+          setAssignedTasks(updatedAssignedTasks);
 
-  const handleDateSubmit = (taskId: string) => {
-    fetch('http://localhost:3000/AuditDateUpdate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ taskId, auditStartDate })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Audit start date updated:', data);
-      setSelectedTaskId(null);
-    })
-    .catch(error => {
-      console.error('Error updating audit start date:', error);
-    });
-  };
+          // Update the completedTasks state with the newly fetched data
+          setCompletedTasks(data.completedTasks || []);
+        })
+        .catch(error => console.error('Error fetching completed tasks:', error));
+    }
+  })
+  .catch(error => {
+    console.error('Error submitting report:', error);
+  });
+};
 
   if (!employeeCode) {
     return <p>Loading...</p>;
@@ -157,6 +143,9 @@ const ECommerce: React.FC = () => {
                 <p className="text-sm text-gray-600 mb-1 dark:text-gray-300">
                   <strong>Document ID:</strong> {task.documentid}
                 </p>
+                <p className="text-sm text-green-600 mb-1 dark:text-red-500">
+                  <strong>Comment:</strong> {task.comment}
+                </p>
                 <p className="text-sm text-gray-600 mb-1 dark:text-gray-300">
                   <strong>Assigned Role:</strong> {task.preparedBy === employeeCode ? "Prepared By You" : "Reviewed By You"}
                 </p>
@@ -207,44 +196,22 @@ const ECommerce: React.FC = () => {
             ))}
           </div>
         )}
+
+        {/* Completed Tasks Section */}
+        <h2 className="text-2xl font-bold mt-8 mb-4">Completed Tasks</h2>
+        {completedTasks.length === 0 ? (
+          <p className="text-lg text-gray-500">No completed tasks yet.</p>
+        ) : (
+          <ul className="list-disc list-inside space-y-2">
+            {completedTasks.map(task => (
+              <li key={task.id} className="text-lg text-gray-700 dark:text-gray-300">
+                {task.websiteName} - {task.organizationName} (Completed on: {new Date(task.completionDate).toLocaleDateString()})
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-
-      {/* Completed Final Reports */}
-      <CompletedFinalReports completedTasks={completedTasks} />
     </>
-  );
-};
-
-const CompletedFinalReports: React.FC<{ completedTasks: any[] }> = ({ completedTasks }) => {
-  return (
-    <div className="mt-6">
-      <h2 className="text-2xl font-bold mb-4">Completed Final Reports</h2>
-      {completedTasks.length === 0 ? (
-        <p className="text-lg text-gray-500">No completed tasks yet.</p>
-      ) : (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {completedTasks.map(task => (
-            <div key={task.id} className="bg-white rounded-lg shadow-lg p-6 dark:bg-boxdark dark:border dark:border-strokedark">
-              <h2 className="text-xl font-medium text-black mb-2 dark:text-white">
-                {task.websiteName}
-              </h2>
-              <p className="text-sm text-gray-600 mb-1 dark:text-gray-300">
-                <strong>Organization:</strong> {task.organizationName}
-              </p>
-              <p className="text-sm text-gray-600 mb-1 dark:text-gray-300">
-                <strong>Work Order:</strong> {task.workOrder}
-              </p>
-              <p className="text-sm text-gray-600 mb-1 dark:text-gray-300">
-                <strong>Document ID:</strong> {task.documentid}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                <strong>Work Order Date:</strong> {new Date(task.workOrderDate).toLocaleDateString()}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
   );
 };
 
