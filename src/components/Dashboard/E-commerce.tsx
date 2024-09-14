@@ -40,25 +40,31 @@ const ECommerce: React.FC = () => {
   };
 
   const handleSubmit = (taskId: string) => {
-    console.log(`Submitting report for task ${taskId}:`, reportType);
-
-    fetch('http://localhost:3000/submit-report', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ taskId, reportType, auditStartDate })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Report submitted:', data);
-      setSelectedTaskId(null); // Clear selected task after submission
-
-      // If the report type is "Final", move the task to completed tasks
-     
-    })
-    .catch(error => {
-      console.error('Error submitting report:', error);
-    });
+    const confirmSubmit = window.confirm(`Are you sure you want to submit a ${reportType} report for task ${taskId}?`);
+  
+    if (confirmSubmit) {
+      console.log(`Submitting report for task ${taskId}:`, reportType);
+  
+      fetch('http://localhost:3000/submit-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taskId, reportType, auditStartDate })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Report submitted:', data);
+        setSelectedTaskId(null); // Clear selected task after submission
+  
+        // If the report type is "Final", move the task to completed tasks
+      })
+      .catch(error => {
+        console.error('Error submitting report:', error);
+      });
+    } else {
+      console.log('Report submission canceled');
+    }
   };
+  
 
   const handleDateSubmit = (taskId: string) => {
     fetch('http://localhost:3000/AuditDateUpdate', {
