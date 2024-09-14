@@ -1,30 +1,48 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-
-// Define interfaces for type safety
-interface ReportData {
-  month: string;
-  totalReports: number;
-}
+import React, { useState } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const EmployeeDashboard = () => {
-  const [monthlyReports, setMonthlyReports] = useState<ReportData[]>([]); // State for monthly reports
+  const [selectedMonth, setSelectedMonth] = useState(null); // State to track the selected month
 
-  // Fetch monthly reports on component mount
-  useEffect(() => {
-    const fetchMonthlyReports = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/m-reports");
-        const data: ReportData[] = await response.json();
-        setMonthlyReports(data);
-      } catch (err) {
-        console.error("Error fetching monthly report data:", err);
-      }
-    };
-    fetchMonthlyReports();
-  }, []);
+  const employeeData = {
+    name: 'Govind Pareek',
+    email: 'Govind [at] drcbscyber [dot] com',
+    TotalProjects: 8, 
+    ProjectCompleted: 6,
+    ProjectPending: 2,
+    reportsSent: [
+      { month: 'January', weeks: [0, 0, 0, 0] },
+      { month: 'Feb', weeks: [0, 0, 0, 0] },
+      { month: 'March', weeks: [0, 0, 0, 0] },
+      { month: 'April', weeks: [0, 0, 0, 0] },
+      { month: 'May', weeks: [0, 0, 0, 0] },
+      { month: 'June', weeks: [0, 0, 0, 0] },
+      { month: 'July', weeks: [0, 0, 0,0] },
+      { month: 'August', weeks: [0, 0, 0, 0] },
+      { month: 'Sept', weeks: [2, 2, 0, 0] },
+      { month: 'October', weeks: [0, 0, 0, 0] },
+      { month: 'Nov', weeks: [0, 0, 0, 0] },
+      { month: 'Decm', weeks: [0, 0, 0, 0] },
+    ],
+  };
+
+  const reportTotals = employeeData.reportsSent.map((monthData) => {
+    const total = monthData.weeks.reduce((sum, week) => sum + week, 0);
+    return { month: monthData.month, total };
+  });
+
+  const handleBarClick = (data) => {
+    setSelectedMonth(data.month); 
+  };
+
+  const weeklyData = selectedMonth
+    ? employeeData.reportsSent.find((monthData) => monthData.month === selectedMonth).weeks.map((weekReports, index) => ({
+        week: `Week ${index + 1}`,
+        reports: weekReports,
+      }))
+    : [];
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-900 dark:to-black">
@@ -37,8 +55,8 @@ const EmployeeDashboard = () => {
                   GP
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-2xl font-semibold">Govind Pareek</h3>
-                  <p className="text-sm opacity-75">Govind [at] drcbscyber [dot] com</p>
+                  <h3 className="text-2xl font-semibold">{employeeData.name}</h3>
+                  <p className="text-sm opacity-75">{employeeData.email}</p>
                 </div>
               </div>
             </div>
@@ -48,15 +66,15 @@ const EmployeeDashboard = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="bg-gradient-to-r from-green-400 to-green-600 text-white shadow rounded-lg p-4 text-center">
                 <h4 className="text-lg font-semibold">Total Task</h4>
-                <p className="text-4xl font-bold">2</p>
+                <p className="text-4xl font-bold">{employeeData.TotalProjects}</p>
               </div>
               <div className="bg-gradient-to-r from-blue-400 to-blue-600 text-white shadow rounded-lg p-4 text-center">
                 <h4 className="text-lg font-semibold">Completed</h4>
-                <p className="text-4xl font-bold">102</p>
+                <p className="text-4xl font-bold">{employeeData.ProjectCompleted}</p>
               </div>
               <div className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow rounded-lg p-4 text-center">
                 <h4 className="text-lg font-semibold">Pending</h4>
-                <p className="text-4xl font-bold">72</p>
+                <p className="text-4xl font-bold">{employeeData.ProjectPending}</p>
               </div>
             </div>
           </div>
@@ -64,18 +82,45 @@ const EmployeeDashboard = () => {
 
         {/* Graph Section */}
         <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Reports Sent (Monthly)</h2>
-          <div className="bg-white dark:bg-gray-800 p-6 shadow-lg rounded-lg">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={monthlyReports}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="totalReports" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          {!selectedMonth ? (
+            <>
+              <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Reports Sent (Monthly)</h2>
+              <div className="bg-white dark:bg-gray-800 p-6 shadow-lg rounded-lg">
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={reportTotals} onClick={(e) => handleBarClick(e.activePayload[0].payload)}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="total" fill="#8884d8" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
+                Weekly Reports for {selectedMonth}
+              </h2>
+              <div className="bg-white dark:bg-gray-800 p-6 shadow-lg rounded-lg">
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={weeklyData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="week" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="reports" fill="#82ca9d" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <button
+                onClick={() => setSelectedMonth(null)}
+                className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+              >
+                Back to Monthly
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
