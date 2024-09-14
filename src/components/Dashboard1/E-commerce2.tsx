@@ -168,16 +168,16 @@ const ECommerce_new: React.FC = () => {
                     <td className="py-4 px-6 border-b text-sm text-gray-400">{project.reviewedBy}</td>
                     <td className="py-4 px-6 border-b text-sm text-gray-400">{project.status}</td>
                     <td className="py-4 px-6 border-b text-sm text-gray-400">
-                      {commentBox[project.id] ? (
+                      {commentBox[project.workOrder] ? (
                         <>
                           <textarea
                             className="w-full bg-gray-700 text-dark-500 dark:text-dark p-2 rounded mb-2"
-                            value={comments[project.id] || ""}
-                            onChange={(e) => handleCommentChange(project.id, e.target.value)}
+                            value={comments[project.workOrder] || ""}
+                            onChange={(e) => handleCommentChange(project.workOrder, e.target.value)}
                           />
                           <button
                             className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                            onClick={() => handleCommentSubmit(project.id)}
+                            onClick={() => handleCommentSubmit(project.workOrder)}
                           >
                             Submit
                           </button>
@@ -185,7 +185,7 @@ const ECommerce_new: React.FC = () => {
                       ) : (
                         <button
                           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                          onClick={() => setCommentBox((prev) => ({ ...prev, [project.id]: true }))}
+                          onClick={() => setCommentBox((prev) => ({ ...prev, [project.workOrder]: true }))}
                         >
                           Enter Comment
                         </button>
