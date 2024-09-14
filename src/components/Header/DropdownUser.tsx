@@ -7,6 +7,8 @@ const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const name=sessionStorage.getItem('name');
   const Desig=sessionStorage.getItem('Designation');
+
+  console.log("Designation",Desig);
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <Link
@@ -18,7 +20,7 @@ const DropdownUser = () => {
           <span className="block text-sm font-medium text-black dark:text-white">
         {name}
           </span>
-          <span className="block text-xs">Assistant Cyber Security Auditor</span>
+          <span className="block text-xs">{Desig}</span>
         </span>
 
         {/* <span className="h-12 w-12 rounded-full">

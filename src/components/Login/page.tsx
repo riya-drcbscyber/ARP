@@ -53,7 +53,7 @@
       try {
         const response = await axios.post('http://localhost:3000/api/login', formData);
         // Extracting message and employeeId from the nested user object
-        const { message, user: { employeeId,name,Role } } = response.data;
+        const { message, user: { employeeId,name,Role,Designation } } = response.data;
     
         console.log("--------->>", employeeId); // This should log the correct employeeId
     
@@ -61,8 +61,10 @@
         sessionStorage.setItem('employeeId', employeeId);
         sessionStorage.setItem('name',name)
         sessionStorage.setItem('role',Role)
+        sessionStorage.setItem('Designation',Designation)
+        console.log("Designation yo yo ",Designation);
         console.log("--------->>", Role);
-    
+        
         setSuccessMessage(message);
         if (Role === 'Admin'){
           router.push('/AdminDboard');
