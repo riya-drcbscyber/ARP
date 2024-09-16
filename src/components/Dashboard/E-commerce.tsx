@@ -139,7 +139,7 @@ const ECommerce: React.FC = () => {
       </div>
 
       {/* Audit Stats */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2">
+      {/* <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2">
         <CardDataStats
           title="Total Number Of Audits"
           total={stats.find(stat => stat.stat_type === "total_audits")?.stat_value || "Loading..."}
@@ -148,7 +148,7 @@ const ECommerce: React.FC = () => {
           title="Total Audit Pending"
           total={stats.find(stat => stat.stat_type === "total_pending_audits")?.stat_value || "Loading..."}
         />
-      </div>
+      </div> */}
 
       {/* Assigned Tasks Section */}
       <div className="mt-6">
